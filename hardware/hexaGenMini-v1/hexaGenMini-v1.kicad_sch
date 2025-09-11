@@ -1,0 +1,189 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "87eb4be0-ba1c-4dce-a9c8-999098c87f17")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 88.9 25.4)
+		(size 30.48 16.51)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "181975ae-3be2-4e86-b7e6-946c03ae92aa")
+		(property "Sheetname" "LDO"
+			(at 88.9 24.6884 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "LDO.kicad_sch"
+			(at 88.9 42.4946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 64.77 76.2)
+		(size 60.96 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "73c52cbb-461b-47c3-a7ee-e8065dca72a5")
+		(property "Sheetname" "MCU"
+			(at 64.77 75.4884 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "MCU.kicad_sch"
+			(at 64.77 107.2646 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 31.75 22.86)
+		(size 30.48 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "c097cd0d-933c-4b7c-89b3-e8ff6a0119ca")
+		(property "Sheetname" "CONNECTOR"
+			(at 31.75 22.1484 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CONNECTOR.kicad_sch"
+			(at 31.75 46.3046 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 165.1 77.47)
+		(size 66.04 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "d4d2fcb4-0a64-4c28-96da-ff74c0fa8a79")
+		(property "Sheetname" "DDS"
+			(at 165.1 76.7584 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "DDS.kicad_sch"
+			(at 165.1 105.9946 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
