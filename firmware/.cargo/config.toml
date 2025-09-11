@@ -1,0 +1,6 @@
+[build]
+target-dir = "target"
+target = "thumbv6m-none-eabi"
+
+[target.thumbv6m-none-eabi]
+rustflags = ["-C", "link-arg=-Tlink.x", "-C", "link-arg=--gc-sections"]
