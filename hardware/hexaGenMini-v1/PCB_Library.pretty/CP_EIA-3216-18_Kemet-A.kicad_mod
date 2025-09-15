@@ -1,0 +1,212 @@
+(footprint "CP_EIA-3216-18_Kemet-A"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Tantalum Capacitor SMD Kemet-A (3216-18 Metric), IPC-7352 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator")
+	(tags "capacitor tantalum")
+	(property "Reference" "REF**"
+		(at -0.125 1.21 0)
+		(layer "F.SilkS")
+		(uuid "8320d18c-a665-4ca0-a870-cb5c4d15afa9")
+		(effects
+			(font
+				(size 0.2 0.2)
+				(thickness 0.02)
+			)
+		)
+	)
+	(property "Value" "10uF Tantalum"
+		(at 0 1.75 0)
+		(layer "F.Fab")
+		(uuid "456ef97f-b494-442a-9cab-d39ec433aecb")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "~"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ee81ff28-ae54-4ee1-a5df-4cc6378308be")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Polarized capacitor"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0dfa6f29-cf82-43d5-9002-ddf5d4f6550e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2.32 -0.955)
+		(end -2.32 0.955)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "b4565bc3-096c-4e06-b08d-6618ce0cb478")
+	)
+	(fp_line
+		(start -2.32 0.955)
+		(end 1.6 0.955)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "28110bb1-938d-48ce-a7a3-81a342228662")
+	)
+	(fp_line
+		(start 1.6 -0.955)
+		(end -2.32 -0.955)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0d3597fc-0eac-4bee-bbae-bfa44dca6db2")
+	)
+	(fp_line
+		(start -2.31 -1.05)
+		(end 2.31 -1.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "db5a6b68-b663-4b13-b8e6-51fd271e552f")
+	)
+	(fp_line
+		(start -2.31 1.05)
+		(end -2.31 -1.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "43f0894a-1140-4286-9162-c052dbc30d7c")
+	)
+	(fp_line
+		(start 2.31 -1.05)
+		(end 2.31 1.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "4a06d778-2c99-4471-baff-b0cc9665b52d")
+	)
+	(fp_line
+		(start 2.31 1.05)
+		(end -2.31 1.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "7f107746-f1c9-4e3b-b4ad-78e067d7b6ac")
+	)
+	(fp_line
+		(start -1.6 -0.4)
+		(end -1.6 0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "b95997f1-4690-438b-a532-22c9af65bd3b")
+	)
+	(fp_line
+		(start -1.6 0.8)
+		(end 1.6 0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "d6af99b4-d9d3-4c4e-a18f-eba5ee8642f6")
+	)
+	(fp_line
+		(start -1.2 -0.8)
+		(end -1.6 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "a191c8ac-5cf6-4c3a-b9cf-53e0a6763ddb")
+	)
+	(fp_line
+		(start 1.6 -0.8)
+		(end -1.2 -0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "cb15795f-ff9d-495a-a6f8-ff50280940e9")
+	)
+	(fp_line
+		(start 1.6 0.8)
+		(end 1.6 -0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "66b2e36e-bf6f-45b9-8917-808c52f634a7")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "b871ce75-c5c5-45a6-94bb-8ef5b8657780")
+		(effects
+			(font
+				(size 0.2 0.2)
+				(thickness 0.02)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -1.3525 0)
+		(size 1.415 1.39)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.179856)
+		(uuid "4cbe0dec-7b94-4995-b9fc-4f873e79cf22")
+	)
+	(pad "2" smd roundrect
+		(at 1.3525 0)
+		(size 1.415 1.39)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.179856)
+		(uuid "b67ad863-5d9b-4f80-9fec-27c49da41a71")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Capacitor_Tantalum_SMD.3dshapes/CP_EIA-3216-18_Kemet-A.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

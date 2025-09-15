@@ -4,74 +4,90 @@
 	(generator_version "9.0")
 	(uuid "87eb4be0-ba1c-4dce-a9c8-999098c87f17")
 	(paper "A4")
-	(lib_symbols)
-	(no_connect
-		(at 213.36 77.47)
-		(uuid "2f25061f-26e2-4e36-806c-687b2abb0f07")
-	)
-	(no_connect
-		(at 100.33 106.68)
-		(uuid "33c4a7e5-3065-4e1c-b782-ceea763f1865")
-	)
-	(no_connect
-		(at 200.66 77.47)
-		(uuid "38fbcf57-127c-47fc-b691-a8485a23fbf8")
-	)
-	(no_connect
-		(at 85.09 106.68)
-		(uuid "3c733a37-fe53-485d-9356-3d669e571c3b")
-	)
-	(no_connect
-		(at 90.17 106.68)
-		(uuid "44519cd8-2a3c-4c83-9f37-609d9912e77b")
-	)
-	(no_connect
-		(at 195.58 77.47)
-		(uuid "538ca8c5-38f7-4ceb-b062-c53e8c35d880")
-	)
-	(no_connect
-		(at 203.2 77.47)
-		(uuid "5f461ee0-4fa1-43c0-b12a-8e3255469afc")
-	)
-	(no_connect
-		(at 92.71 106.68)
-		(uuid "7ac74b4e-8e93-447d-9f8b-4adc90e6589e")
-	)
-	(no_connect
-		(at 193.04 77.47)
-		(uuid "9b1dab6f-b10b-492f-8cf1-e08f250d754a")
-	)
-	(no_connect
-		(at 87.63 106.68)
-		(uuid "b05dfe90-cb62-474b-956c-0728feba5a76")
-	)
-	(no_connect
-		(at 210.82 77.47)
-		(uuid "b55de115-df33-4fa3-b472-6cdc1f3f62d3")
-	)
-	(no_connect
-		(at 82.55 106.68)
-		(uuid "c4e011f3-06ad-4b2a-941f-89bef7c7c2a6")
-	)
-	(no_connect
-		(at 205.74 77.47)
-		(uuid "c66a50ce-3b23-4c4a-922f-d0c5d0e93ca0")
-	)
-	(no_connect
-		(at 208.28 77.47)
-		(uuid "d4f2cf18-06a7-4742-861a-e78ca824c922")
-	)
-	(no_connect
-		(at 95.25 106.68)
-		(uuid "ef77042f-4139-4ca6-a4c6-d44d6ba3d53c")
-	)
-	(no_connect
-		(at 198.12 77.47)
-		(uuid "fbb18a3e-241a-41ca-a1ec-1f9320c87f6f")
-	)
-	(no_connect
-		(at 97.79 106.68)
-		(uuid "fd520c7a-b124-4ff8-84f6-cd5d10bf439d")
+	(lib_symbols
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(wire
 		(pts
@@ -172,6 +188,262 @@
 			(type default)
 		)
 		(uuid "fa3260ba-2126-481f-af3d-eb2b5a80d7be")
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 16.51 148.59 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "220785cd-0bc1-4f9f-8aa3-787db9f785f8")
+		(property "Reference" "H3"
+			(at 19.05 147.3199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 19.05 149.8599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.5mm"
+			(at 16.51 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 16.51 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 16.51 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 16.51 153.67 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "634681c7-24aa-4db7-86b9-c4a959cbcb54")
+		(property "Reference" "H4"
+			(at 19.05 152.3999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 19.05 154.9399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.5mm"
+			(at 16.51 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 16.51 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 16.51 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 16.51 142.24 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "95cfa164-3e39-42d8-bf41-445c64c029c5")
+		(property "Reference" "H2"
+			(at 19.05 140.9699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 19.05 143.5099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.5mm"
+			(at 16.51 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 16.51 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 16.51 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "hexaGenMini-v1"
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 16.51 135.89 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cc5cfba9-569f-4136-9a73-972cf2bb2657")
+		(property "Reference" "H1"
+			(at 19.05 134.6199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 19.05 137.1599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.5mm"
+			(at 16.51 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 16.51 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 16.51 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project ""
+				(path "/87eb4be0-ba1c-4dce-a9c8-999098c87f17"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(sheet
 		(at 85.09 22.86)
@@ -302,87 +574,7 @@
 				(justify left)
 			)
 		)
-		(pin "QSPI_SCLK" input
-			(at 100.33 106.68 270)
-			(uuid "ca62961e-7916-4e5c-9fdc-7d140981f38a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "QSPI_SD0" input
-			(at 97.79 106.68 270)
-			(uuid "6ce10baa-06d1-4983-92e7-2eec6686f5bf")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "QSPI_SD1" input
-			(at 95.25 106.68 270)
-			(uuid "1686c0a8-62ad-4d96-bf3d-c61ea9c80b8b")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "QSPI_SD2" input
-			(at 92.71 106.68 270)
-			(uuid "c4fadb95-ea94-4a33-b1e9-efe0b2067077")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "QSPI_SD3" input
-			(at 90.17 106.68 270)
-			(uuid "568b5c40-5cfa-4e96-93b2-3f39a84ab91f")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "QSPI_SS" input
-			(at 87.63 106.68 270)
-			(uuid "72e3b82a-ff0c-42d7-b03f-6cb84b0849fa")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "SWCLK" input
-			(at 85.09 106.68 270)
-			(uuid "60bb55fd-3564-451e-8901-7b1fd5480cce")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "SWD" input
-			(at 82.55 106.68 270)
-			(uuid "599ec9df-f7b6-43ab-a0c0-d210cbad61fa")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "USB_DM" input
+		(pin "USB_DN" input
 			(at 64.77 82.55 180)
 			(uuid "afa8f6f6-7cb9-4b51-bb74-5400a2dfa178")
 			(effects
@@ -456,7 +648,7 @@
 				(justify left)
 			)
 		)
-		(pin "USB_DM" input
+		(pin "USB_DN" input
 			(at 49.53 45.72 270)
 			(uuid "7ebf9592-8b23-41dd-9842-ca505920677b")
 			(effects
@@ -558,96 +750,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-			)
-		)
-		(pin "DDS_CLKIN" input
-			(at 193.04 77.47 90)
-			(uuid "4121befd-3cb2-4065-b821-91b85a4bfbec")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_D0" input
-			(at 195.58 77.47 90)
-			(uuid "f711ceea-77e2-4e8b-8deb-48938049ba52")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_D1" input
-			(at 198.12 77.47 90)
-			(uuid "2204ca69-7b46-434e-aa90-69089d2fed29")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_IOUT" input
-			(at 200.66 77.47 90)
-			(uuid "1f7cc938-5e5d-4494-89c5-5f73c59bb3c2")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_IOUTB" input
-			(at 203.2 77.47 90)
-			(uuid "ea6b3504-7085-43ef-960a-fff6c0d3061d")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_IOUTF" input
-			(at 205.74 77.47 90)
-			(uuid "ff419f8d-3f9b-47e3-8ed8-3adb18c462a0")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_QOUT" input
-			(at 208.28 77.47 90)
-			(uuid "d903f05f-104f-4fe6-97d7-5bf75ddb6509")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_QOUTB" input
-			(at 210.82 77.47 90)
-			(uuid "36cd4602-a5f8-45b7-97f0-2f4da7240531")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DDS_VINP" input
-			(at 213.36 77.47 90)
-			(uuid "ceb49ba0-4076-47d9-a9e6-24c4f68eacf5")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 			)
 		)
 		(instances
