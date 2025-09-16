@@ -3191,7 +3191,7 @@
 		(dnp no)
 		(uuid "05c96df2-5322-42fd-b886-2020ae43f32c")
 		(property "Reference" "R17"
-			(at 124.46 132.0799 0)
+			(at 125.222 134.62 90)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -3199,8 +3199,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "200"
-			(at 124.46 134.6199 0)
+		(property "Value" "200Ω ±1% 100mW"
+			(at 129.286 146.558 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3235,6 +3235,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "UNI-ROYAL"
+			(at 127 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF2000T5E"
+			(at 127 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C8218"
+			(at 127 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0078335a-7991-4a8f-90a1-97a12c42ddd5")
 		)
@@ -3261,7 +3288,7 @@
 		(dnp no)
 		(uuid "06577326-b261-486a-87af-df1b938d0234")
 		(property "Reference" "C21"
-			(at 198.12 36.8235 0)
+			(at 196.088 40.132 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3269,8 +3296,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "0.1uF"
-			(at 198.12 39.3635 0)
+		(property "Value" "CER 100nF 16V X7R"
+			(at 197.866 48.26 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3297,6 +3324,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 200.66 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "Samsung Electro-Mechanics"
+			(at 200.66 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 200.66 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C1525"
 			(at 200.66 38.1 0)
 			(effects
 				(font
@@ -3331,7 +3385,7 @@
 		(dnp no)
 		(uuid "10dc2ff2-9d2e-4950-860f-833bde1568e8")
 		(property "Reference" "C23"
-			(at 177.8 36.8235 0)
+			(at 176.276 39.624 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3339,8 +3393,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "0.1uF"
-			(at 177.8 39.3635 0)
+		(property "Value" "CER 100nF 16V X7R"
+			(at 178.054 46.99 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3375,6 +3429,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "Samsung Electro-Mechanics"
+			(at 180.34 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 180.34 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C1525"
+			(at 180.34 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "9cd05fd5-cce9-4c69-86e3-b370d46db958")
 		)
@@ -3398,18 +3479,17 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "28b0a29d-3a7d-42d9-b818-c5e0485060ae")
 		(property "Reference" "L1"
-			(at 82.55 121.92 90)
+			(at 82.042 124.968 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "470nH"
-			(at 82.55 124.46 90)
+		(property "Value" "470nH 500mA 450mΩ"
+			(at 82.296 128.778 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3436,6 +3516,33 @@
 		)
 		(property "Description" "Inductor, small symbol"
 			(at 82.55 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "muRata"
+			(at 82.55 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "LQW18CNR47J00D"
+			(at 82.55 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C341701"
+			(at 82.55 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3477,7 +3584,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "5.6pF"
+		(property "Value" "CER 5.6pF 50V NP0"
 			(at 93.9865 111.76 0)
 			(effects
 				(font
@@ -3505,6 +3612,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 95.25 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "YAGEO"
+			(at 95.25 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CC0402BRNPO9BN5R6"
+			(at 95.25 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C505468"
 			(at 95.25 114.3 0)
 			(effects
 				(font
@@ -3679,8 +3813,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
-			(at 79.502 47.752 90)
+		(property "Value" "100Ω ±1% 100mW"
+			(at 74.422 47.752 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3708,6 +3842,33 @@
 		)
 		(property "Description" "Resistor, small symbol"
 			(at 81.28 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "YAGEO"
+			(at 81.28 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-07100RL"
+			(at 81.28 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C105588"
+			(at 81.28 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3748,7 +3909,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "470pF"
+		(property "Value" "CER 470pF 50V C0G"
 			(at 102.362 57.912 90)
 			(effects
 				(font
@@ -3777,6 +3938,33 @@
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 104.14 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "muRata"
+			(at 104.14 54.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GRM1555C1H471JA01D"
+			(at 104.14 54.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C76971"
+			(at 104.14 54.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3878,7 +4066,7 @@
 		(dnp no)
 		(uuid "47ed3010-dc0d-4ad7-a4b1-cf68f171e4eb")
 		(property "Reference" "C29"
-			(at 111.76 133.3435 0)
+			(at 110.236 136.652 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3886,8 +4074,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "22pF"
-			(at 111.76 135.8835 0)
+		(property "Value" "CER 22pF 50V C0G"
+			(at 112.014 149.098 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3914,6 +4102,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 114.3 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "muRata"
+			(at 114.3 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GRM1555C1H220JA01D"
+			(at 114.3 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C76960"
 			(at 114.3 134.62 0)
 			(effects
 				(font
@@ -3984,6 +4199,33 @@
 			)
 		)
 		(property "Description" "CMOS, 125 MHz, Complete DDS Synthesizer, SSOP-28"
+			(at 58.42 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "ADI"
+			(at 58.42 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "AD9850BRSZ"
+			(at 58.42 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C18731"
 			(at 58.42 58.42 0)
 			(effects
 				(font
@@ -4226,10 +4468,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "66d339de-f177-4bba-a966-d07d3a6f0901")
 		(property "Reference" "R10"
-			(at 38.1 29.2099 0)
+			(at 39.878 31.75 90)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -4237,8 +4478,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1k"
-			(at 38.1 31.7499 0)
+		(property "Value" "1kΩ ±1% 100mW"
+			(at 37.846 39.116 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4265,6 +4506,33 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
+			(at 35.56 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "YAGEO"
+			(at 35.56 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-071KL"
+			(at 35.56 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C22548"
 			(at 35.56 30.48 0)
 			(effects
 				(font
@@ -4432,7 +4700,7 @@
 		(dnp no)
 		(uuid "7b3067bb-b660-40fb-baaa-b43502d7d6d7")
 		(property "Reference" "C27"
-			(at 85.09 133.3435 0)
+			(at 83.566 136.906 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4440,8 +4708,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "33pF"
-			(at 85.09 135.8835 0)
+		(property "Value" "CER 33pF 50V C0G"
+			(at 85.344 150.622 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4468,6 +4736,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 87.63 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "Samsung Electro-Mechanics"
+			(at 87.63 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL05C330JB5NNNC"
+			(at 87.63 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C70465"
 			(at 87.63 134.62 0)
 			(effects
 				(font
@@ -4509,7 +4804,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_Coaxial"
+		(property "Value" "RCPT SMA 50Ω"
 			(at 139.9932 118.11 90)
 			(effects
 				(font
@@ -4537,6 +4832,33 @@
 		)
 		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
 			(at 139.7 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "Samtec"
+			(at 139.7 121.92 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "SMA-J-P-H-ST-EM1"
+			(at 139.7 121.92 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C5199907"
+			(at 139.7 121.92 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4578,7 +4900,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "1pF"
+		(property "Value" "CER 1pF 50V C0G"
 			(at 81.2865 111.76 0)
 			(effects
 				(font
@@ -4606,6 +4928,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 82.55 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "muRata"
+			(at 82.55 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GJM1555C1H1R0BB01D"
+			(at 82.55 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C76898"
 			(at 82.55 114.3 0)
 			(effects
 				(font
@@ -4707,7 +5056,7 @@
 		(dnp no)
 		(uuid "91c60ced-c441-4c64-a12c-3a744638ad19")
 		(property "Reference" "C22"
-			(at 187.96 36.8235 0)
+			(at 185.674 40.132 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4715,8 +5064,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "0.1uF"
-			(at 187.96 39.3635 0)
+		(property "Value" "CER 100nF 16V X7R"
+			(at 187.452 48.006 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4743,6 +5092,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 190.5 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "Samsung Electro-Mechanics"
+			(at 190.5 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 190.5 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C1525"
 			(at 190.5 38.1 0)
 			(effects
 				(font
@@ -4853,7 +5229,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "200"
+		(property "Value" "200Ω ±1% 100mW"
 			(at 60.96 134.6199 0)
 			(effects
 				(font
@@ -4881,6 +5257,33 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
+			(at 63.5 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "UNI-ROYAL"
+			(at 63.5 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF2000T5E"
+			(at 63.5 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C8218"
 			(at 63.5 133.35 0)
 			(effects
 				(font
@@ -4923,7 +5326,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "4.7pF"
+		(property "Value" "CER 4.7pF 50V C0G"
 			(at 106.6865 111.76 0)
 			(effects
 				(font
@@ -4959,6 +5362,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "muRata"
+			(at 107.95 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GJM1555C1H4R7BB01D"
+			(at 107.95 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C161327"
+			(at 107.95 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "bef71196-fba2-4fce-9cf9-a18c631f5ac4")
 		)
@@ -4985,7 +5415,7 @@
 		(dnp no)
 		(uuid "b58233d4-d4f9-445f-906d-92e10fd2416a")
 		(property "Reference" "C24"
-			(at 167.64 36.8235 0)
+			(at 165.862 40.132 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4993,8 +5423,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "0.1uF"
-			(at 167.64 39.3635 0)
+		(property "Value" "CER 100nF 16V X7R"
+			(at 167.64 48.006 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5021,6 +5451,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 170.18 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "Samsung Electro-Mechanics"
+			(at 170.18 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 170.18 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C1525"
 			(at 170.18 38.1 0)
 			(effects
 				(font
@@ -5096,6 +5553,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "ABRACON"
+			(at 224.79 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "ASFL1-125.000MHZ-LC-T"
+			(at 224.79 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C17447576"
+			(at 224.79 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "ca449463-e921-40f5-8569-4dfbbe614b1c")
 		)
@@ -5128,7 +5612,7 @@
 		(dnp no)
 		(uuid "c23706a6-ee43-47eb-bd30-6a232ebf5537")
 		(property "Reference" "C20"
-			(at 208.28 36.8235 0)
+			(at 206.502 39.878 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5136,8 +5620,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "0.1uF"
-			(at 208.28 39.3635 0)
+		(property "Value" "CER 100nF 16V X7R"
+			(at 208.28 46.482 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5172,6 +5656,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "Samsung Electro-Mechanics"
+			(at 210.82 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 210.82 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C1525"
+			(at 210.82 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "6c5cc197-28a0-45e5-a320-8c17752c0bf7")
 		)
@@ -5195,18 +5706,17 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "cc9980bc-3d94-4dba-9ad3-c119afb92c26")
 		(property "Reference" "L2"
-			(at 95.25 121.92 90)
+			(at 95.25 124.968 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "390nH"
-			(at 95.25 124.46 90)
+		(property "Value" "390nH 80mA 6.2Ω"
+			(at 95.504 123.19 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5240,6 +5750,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "muRata"
+			(at 95.25 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "LQW18ANR39G00D"
+			(at 95.25 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C98095"
+			(at 95.25 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7019975b-abe5-42f4-b85e-e62d0da2020e")
 		)
@@ -5266,7 +5803,7 @@
 		(dnp no)
 		(uuid "d1a7b60b-4d8c-47d9-8d9b-6f67c11012c2")
 		(property "Reference" "R11"
-			(at 27.94 29.2099 0)
+			(at 26.67 32.512 90)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -5274,8 +5811,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
-			(at 27.94 31.7499 0)
+		(property "Value" "10kΩ ±1% 100mW"
+			(at 28.448 39.37 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5302,6 +5839,33 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
+			(at 30.48 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "UNI-ROYAL"
+			(at 30.48 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF1002T5E"
+			(at 30.48 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C25804"
 			(at 30.48 30.48 0)
 			(effects
 				(font
@@ -5343,7 +5907,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "470pF"
+		(property "Value" "CER 470pF 50V C0G"
 			(at 102.362 66.802 90)
 			(effects
 				(font
@@ -5372,6 +5936,33 @@
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 104.14 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "muRata"
+			(at 104.14 63.5 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GRM1555C1H471JA01D"
+			(at 104.14 63.5 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C76971"
+			(at 104.14 63.5 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5413,8 +6004,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
-			(at 136.652 135.128 90)
+		(property "Value" "100Ω ±1% 100mW"
+			(at 141.478 143.256 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5449,6 +6040,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "YAGEO"
+			(at 139.7 133.35 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-07100RL"
+			(at 139.7 133.35 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C105588"
+			(at 139.7 133.35 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "6bed3182-6532-497a-baa6-676685fc3ab6")
 		)
@@ -5475,15 +6093,15 @@
 		(dnp no)
 		(uuid "d3af8179-a61e-416c-a148-7832992013c2")
 		(property "Reference" "R12"
-			(at 78.74 78.74 90)
+			(at 80.01 78.232 90)
 			(effects
 				(font
 					(size 1.016 1.016)
 				)
 			)
 		)
-		(property "Value" "3.9k"
-			(at 78.74 76.2 90)
+		(property "Value" "3.9kΩ ±1% 100mW"
+			(at 85.598 75.946 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5510,6 +6128,33 @@
 		)
 		(property "Description" "Resistor, small symbol"
 			(at 78.74 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "YAGEO"
+			(at 78.74 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-073K9L"
+			(at 78.74 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C114616"
+			(at 78.74 73.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5550,7 +6195,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_Coaxial"
+		(property "Value" "RCPT SMA 50Ω"
 			(at 82.296 67.564 0)
 			(effects
 				(font
@@ -5586,6 +6231,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "Samtec"
+			(at 80.01 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "SMA-J-P-H-ST-EM1"
+			(at 80.01 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C5199907"
+			(at 80.01 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3317553c-c7e3-43f9-a7bf-cd431306557a")
 		)
@@ -5609,18 +6281,17 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f251f587-c4f3-4f62-a425-76a4a12c960c")
 		(property "Reference" "L3"
-			(at 107.95 121.92 90)
+			(at 108.204 125.222 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "390nH"
-			(at 107.95 124.46 90)
+		(property "Value" "390nH 80mA 6.2Ω"
+			(at 108.712 128.27 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5654,6 +6325,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "muRata"
+			(at 107.95 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "LQW18ANR39G00D"
+			(at 107.95 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C98095"
+			(at 107.95 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e9e801a6-33e2-48b1-b1c0-31423d732749")
 		)
@@ -5680,7 +6378,7 @@
 		(dnp no)
 		(uuid "f3700c7c-16bc-4a9d-87d6-4ae7445ba64b")
 		(property "Reference" "C28"
-			(at 99.06 133.3435 0)
+			(at 97.282 136.906 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5688,8 +6386,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "22pF"
-			(at 99.06 135.8835 0)
+		(property "Value" "CER 22pF 50V C0G"
+			(at 99.06 150.368 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5716,6 +6414,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 101.6 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "muRata"
+			(at 101.6 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GRM1555C1H220JA01D"
+			(at 101.6 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C76960"
 			(at 101.6 134.62 0)
 			(effects
 				(font
@@ -5750,7 +6475,7 @@
 		(dnp no)
 		(uuid "f3bd2e18-5c0d-4b84-b665-c9aaf55b7350")
 		(property "Reference" "C26"
-			(at 73.66 133.3435 0)
+			(at 72.644 136.398 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5758,8 +6483,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "22pF"
-			(at 73.66 135.8835 0)
+		(property "Value" "CER 22pF 50V C0G"
+			(at 74.168 150.622 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5794,6 +6519,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "muRata"
+			(at 76.2 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "GRM1555C1H220JA01D"
+			(at 76.2 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C76960"
+			(at 76.2 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1d10f2d8-3fce-4222-b579-da00399fe2da")
 		)
@@ -5820,7 +6572,7 @@
 		(dnp no)
 		(uuid "f4c65e8b-a0fe-4a49-afd9-ba5743d59887")
 		(property "Reference" "C25"
-			(at 154.94 35.9409 0)
+			(at 153.416 40.132 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5828,8 +6580,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10uF Tantalum"
-			(at 154.94 38.4809 0)
+		(property "Value" "TANT 10uF ±20% 20V"
+			(at 155.448 47.244 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5856,6 +6608,33 @@
 			)
 		)
 		(property "Description" "Polarized capacitor"
+			(at 158.75 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "KEMET"
+			(at 158.75 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "T491A106M020AT"
+			(at 158.75 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C117023"
 			(at 158.75 38.1 0)
 			(effects
 				(font

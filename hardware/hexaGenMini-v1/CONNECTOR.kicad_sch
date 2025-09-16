@@ -2408,6 +2408,33 @@
 				(hide yes)
 			)
 		)
+		(property "MFR" "hanxia"
+			(at 111.76 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "HX-TYPE-C 16P 180 LT H10.0 USB 2.0 TYPE-C"
+			(at 111.76 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C49261569"
+			(at 111.76 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "A8"
 			(uuid "af9656ba-0b6c-4934-936b-2c34cdfb85f4")
 		)
@@ -2552,7 +2579,7 @@
 				)
 			)
 		)
-		(property "Value" "TPD2EUSB30"
+		(property "Value" "TVS DIODE 5.5VWM 18VC"
 			(at 175.26 68.58 0)
 			(effects
 				(font
@@ -2579,6 +2606,33 @@
 			)
 		)
 		(property "Description" "2-Channel ESD Protection for Super-Speed USB 3.0 Interface, DRT-3"
+			(at 175.26 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "TECH PUBLIC"
+			(at 175.26 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "TPD2EUSB30DRTR"
+			(at 175.26 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C5182099"
 			(at 175.26 76.2 0)
 			(effects
 				(font
@@ -2745,18 +2799,17 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "74fd35f0-26af-42a6-be6d-55bbff22c984")
 		(property "Reference" "D1"
-			(at 142.24 22.86 0)
+			(at 141.986 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "SMF5V0A"
-			(at 142.24 25.4 0)
+		(property "Value" "ESD DIODE 5VWM 9.2VC"
+			(at 145.542 32.004 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2782,6 +2835,33 @@
 			)
 		)
 		(property "Description" "200W unidirectional Transil Transient Voltage Suppressor, 5Vrwm, SMF"
+			(at 142.24 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "VISHAY"
+			(at 142.24 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "SMF5V0A-E3-08"
+			(at 142.24 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C1972946"
 			(at 142.24 29.21 0)
 			(effects
 				(font
@@ -2890,7 +2970,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "5.6k"
+		(property "Value" "5.6kΩ ±1% 100mW"
 			(at 148.59 39.3699 0)
 			(effects
 				(font
@@ -2918,6 +2998,33 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
+			(at 146.05 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "FOJAN"
+			(at 146.05 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "FRC0603F5601TS"
+			(at 146.05 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C2907046"
 			(at 146.05 38.1 0)
 			(effects
 				(font
@@ -3157,7 +3264,7 @@
 				)
 			)
 		)
-		(property "Value" "5.1k"
+		(property "Value" "5.1kΩ ±1% 100mW"
 			(at 140.97 55.88 90)
 			(effects
 				(font
@@ -3185,6 +3292,33 @@
 		)
 		(property "Description" "Resistor, small symbol"
 			(at 140.97 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "FOJAN"
+			(at 140.97 58.42 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "FRC0603F5101TS"
+			(at 140.97 58.42 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C2907044"
+			(at 140.97 58.42 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3226,7 +3360,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10kΩ ±1% 100mW"
 			(at 148.59 49.5299 0)
 			(effects
 				(font
@@ -3254,6 +3388,33 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
+			(at 146.05 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "UNI-ROYAL"
+			(at 146.05 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF1002T5E"
+			(at 146.05 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C25804"
 			(at 146.05 48.26 0)
 			(effects
 				(font
@@ -3295,7 +3456,7 @@
 				)
 			)
 		)
-		(property "Value" "5.1k"
+		(property "Value" "5.1kΩ ±1% 100mW"
 			(at 140.97 63.5 90)
 			(effects
 				(font
@@ -3323,6 +3484,33 @@
 		)
 		(property "Description" "Resistor, small symbol"
 			(at 140.97 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MFR" "FOJAN"
+			(at 140.97 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "FRC0603F5101TS"
+			(at 140.97 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSPN" "C2907044"
+			(at 140.97 60.96 90)
 			(effects
 				(font
 					(size 1.27 1.27)
