@@ -1,0 +1,66 @@
+# SPDX-FileCopyrightText: 2025 hexaTune LLC
+# SPDX-License-Identifier: MIT
+
+# ────────────────────────────────────────────────────────────────────────────────
+# MODULE LABELS
+# ────────────────────────────────────────────────────────────────────────────────
+
+module:firmware:
+  - changed-files:
+      - any-glob-to-any-file: ["firmware/**"]
+
+module:hardware:
+  - changed-files:
+      - any-glob-to-any-file: ["hardware/**"]
+
+module:mechanic:
+  - changed-files:
+      - any-glob-to-any-file: ["mechanic/**"]
+
+module:docs:
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "examples/**", "**/README.md"]
+
+module:cli:
+  - changed-files:
+      - any-glob-to-any-file: ["scripts/**"]
+
+# ────────────────────────────────────────────────────────────────────────────────
+# TYPE LABELS
+# ────────────────────────────────────────────────────────────────────────────────
+
+type:doc:
+  - changed-files:
+      - any-glob-to-any-file:
+          ["docs/**", "LICENSE", "LICENSES/**", "CHANGELOG.md", "**/README.md"]
+
+type:ci:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**", ".gitignore", "package.json"]
+
+type:test:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "integration-tests/**"
+          - "benchmarks/**"
+          - "**/tests/**"
+          - "**/*_test.rs"
+          - "**/test_*.rs"
+
+type:infra:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "firmware/**/Cargo.toml"
+          - "Cargo.toml"
+          - "Cargo.lock"
+          - ".releaserc.yml"
+          - "REUSE.toml"
+
+# ────────────────────────────────────────────────────────────────────────────────
+# DEFAULT LABEL
+# ────────────────────────────────────────────────────────────────────────────────
+
+default:unclassified:
+  - changed-files:
+      - any-glob-to-any-file: ["*"]
+
