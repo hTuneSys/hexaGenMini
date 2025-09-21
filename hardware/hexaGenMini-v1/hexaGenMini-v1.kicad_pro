@@ -503,7 +503,7 @@
       "plot": "fabrication_output/",
       "pos_files": "fabrication_output/",
       "specctra_dsn": "",
-      "step": "",
+      "step": "hexaGenMini-v1.step",
       "svg": "",
       "vrml": ""
     },
