@@ -1,30 +1,69 @@
-[package]
-name = "hexagenmini"
+# SPDX-FileCopyrightText: 2025 hexaTune LLC 
+# SPDX-License-Identifier: MIT
+
+[workspace]
+members = [
+  "crates/at",
+  "crates/dds",
+  "crates/fsm",
+  "crates/rgb",
+  "crates/usb",
+  "crates/nvc",
+  "crates/core",
+  "crates/main",
+]
+resolver = "2"
+
+[workspace.package]
 version = "0.1.0"
+authors = ["Husamettin ARABACI <info@hexatune.com>"]
 edition = "2024"
+license = "MIT"
+license-file = "LICENSE"
+repository = "https://github.com/hTuneSys/hexaGenMini"
+description = "Modular firmware with event-driven architecture for hexaGenMini."
+homepage = "https://hexatune.com"
+keywords = ["rust", "firmware", "event-driven", "embedded", "hexaGenMini"]
+categories = ["embedded", "development-tools", "hardware-support"]
+rust-version = "1.86.0"
 
-[[bin]]
-name = "hexagenmini"
-path = "src/main.rs"
-test = false
-bench = false
-
-[dependencies]
-rp2040-hal = { version = "0.11", features = ["rt"] }
+[workspace.dependencies]
+# Embedded/board
 embedded-hal = "1"
-
-cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
+cortex-m = { version = "0.7" }
 cortex-m-rt = "0.7"
-
+rp2040-boot2 = "0.3"
+itoa = "1"
 defmt = "1.0.1"
 defmt-rtt = "1.0.0"
 panic-probe = { version = "1.0", features = ["print-defmt"] }
 
-rp2040-boot2 = "0.3"
+# Embassy multitasking
+embassy-executor = { version = "0.9", features = [
+  "arch-cortex-m",
+  "executor-thread",
+] }
+embassy-usb = "0.5"
+embassy-time = "0.5"
+embassy-rp = { version = "0.8", features = [
+  "rp2040",
+  "time-driver",
+  "critical-section-impl",
+] }
+embassy-sync = "0.7"
 
-usb-device = "0.3"
-usbd-serial = "0.2.2"
-itoa = "1"
+static_cell = "2"
+portable-atomic = { version = "1.11", features = ["critical-section"] }
+
+# Internal dependencies
+at = { path = "crates/at" }
+dds = { path = "crates/dds" }
+fsm = { path = "crates/fsm" }
+rgb = { path = "crates/rgb" }
+usb = { path = "crates/usb" }
+nvc = { path = "crates/nvc" }
+core = { path = "crates/core" }
+main = { path = "crates/main" }
 
 [profile.release]
 codegen-units = 1

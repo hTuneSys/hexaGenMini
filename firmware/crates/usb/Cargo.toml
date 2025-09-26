@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2025 hexaTune LLC
+# SPDX-License-Identifier: MIT
+
+[package]
+name = "usb"
+description = "USB domain - handles USB communication and protocols"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[lib]
+test = false
+bench = false
+doctest = false
+
+[dependencies]
+defmt = { workspace = true }
+embassy-executor = { workspace = true }
+embassy-time = { workspace = true }
+embassy-rp = { workspace = true }
+embassy-usb = { workspace = true }
+static_cell = { workspace = true }

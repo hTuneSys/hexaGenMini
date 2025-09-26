@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2025 hexaTune LLC
+# SPDX-License-Identifier: MIT
+
+[package]
+name = "fsm"
+description = "FSM domain - handles finite state machine logic and transitions"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[lib]
+test = false
+bench = false
+doctest = false
+
+[dependencies]

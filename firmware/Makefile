@@ -24,7 +24,7 @@ all: load
 
 build: clean
 	@echo "==> Building ($(PROFILE)) to $(CARGO_TARGET_DIR) for $(TRIPLE)"
-	@$(CARGO) build --target $(TRIPLE) $(BUILD_FLAGS)
+	@$(CARGO) build -p main --target $(TRIPLE) $(BUILD_FLAGS)
 
 elf: build
 	@echo "==> Copying ELF to: $(ELF)"

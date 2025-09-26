@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2025 hexaTune LLC
+# SPDX-License-Identifier: MIT
+
+[package]
+name = "main"
+description = "Main domain - orchestrates all other domains and hardware interaction"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "hexagenmini"
+path = "src/main.rs"
+test = false
+bench = false
+
+[dependencies]
+defmt = { workspace = true }
+defmt-rtt = { workspace = true }
+panic-probe = { workspace = true }
+embedded-hal = { workspace = true }
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+rp2040-boot2 = { workspace = true }
+itoa = { workspace = true }
+embassy-executor = { workspace = true }
+embassy-time = { workspace = true }
+embassy-rp = { workspace = true }
+embassy-usb = { workspace = true }
+embassy-sync = { workspace = true }
+static_cell = { workspace = true }
+portable-atomic = { workspace = true }
+
+usb = { workspace = true }
+
+[dev-dependencies]
