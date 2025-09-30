@@ -1,71 +1,104 @@
 # SPDX-FileCopyrightText: 2025 hexaTune LLC 
 # SPDX-License-Identifier: MIT
 
-[workspace]
-members = [
-  "crates/at",
-  "crates/dds",
-  "crates/fsm",
-  "crates/rgb",
-  "crates/usb",
-  "crates/nvc",
-  "crates/core",
-  "crates/main",
-]
-resolver = "2"
-
-[workspace.package]
+[package]
+name = "hexagenmini"
+description = "Main domain - orchestrates all other domains and hardware interaction"
 version = "0.1.0"
 authors = ["Husamettin ARABACI <info@hexatune.com>"]
 edition = "2024"
 license = "MIT"
 license-file = "LICENSE"
 repository = "https://github.com/hTuneSys/hexaGenMini"
-description = "Modular firmware with event-driven architecture for hexaGenMini."
 homepage = "https://hexatune.com"
 keywords = ["rust", "firmware", "event-driven", "embedded", "hexaGenMini"]
 categories = ["embedded", "development-tools", "hardware-support"]
 rust-version = "1.86.0"
 
-[workspace.dependencies]
-# Embedded/board
-embedded-hal = "1"
-cortex-m = { version = "0.7" }
-cortex-m-rt = "0.7"
-rp2040-boot2 = "0.3"
-itoa = "1"
-defmt = "1.0.1"
-defmt-rtt = "1.0.0"
-panic-probe = { version = "1.0", features = ["print-defmt"] }
+[[bin]]
+name = "hexagenmini"
+path = "src/main.rs"
+test = false
+bench = false
 
-# Embassy multitasking
-embassy-executor = { version = "0.9", features = [
+[dependencies]
+embassy-embedded-hal = { version = "0.5.0", features = ["defmt"] }
+embassy-sync = { version = "0.7.2", features = ["defmt"] }
+embassy-executor = { version = "0.9.0", features = [
   "arch-cortex-m",
   "executor-thread",
+  "executor-interrupt",
+  "defmt",
 ] }
-embassy-usb = "0.5"
-embassy-time = "0.5"
-embassy-rp = { version = "0.8", features = [
-  "rp2040",
+embassy-time = { version = "0.5.0", features = [
+  "defmt",
+  "defmt-timestamp-uptime",
+] }
+embassy-rp = { version = "0.8.0", features = [
+  "defmt",
+  "unstable-pac",
   "time-driver",
   "critical-section-impl",
+  "rp2040",
 ] }
-embassy-sync = "0.7"
+embassy-usb = { version = "0.5.1", features = ["defmt"] }
+embassy-net = { version = "0.7.1", features = [
+  "defmt",
+  "icmp",
+  "tcp",
+  "udp",
+  "raw",
+  "dhcpv4",
+  "medium-ethernet",
+  "dns",
+  "proto-ipv4",
+  "proto-ipv6",
+  "multicast",
+] }
+embassy-net-wiznet = { version = "0.2.1", features = ["defmt"] }
+embassy-futures = { version = "0.1.2" }
+embassy-usb-logger = { version = "0.5.1" }
+cyw43 = { version = "0.5.0", features = ["defmt", "firmware-logs"] }
+cyw43-pio = { version = "0.8.0", features = ["defmt"] }
 
-static_cell = "2"
-portable-atomic = { version = "1.11", features = ["critical-section"] }
+defmt = "1.0.1"
+defmt-rtt = "1.0.0"
+fixed = "1.23.1"
+fixed-macro = "1.2"
 
-# Internal dependencies
-at = { path = "crates/at" }
-dds = { path = "crates/dds" }
-fsm = { path = "crates/fsm" }
-rgb = { path = "crates/rgb" }
-usb = { path = "crates/usb" }
-nvc = { path = "crates/nvc" }
-core = { path = "crates/core" }
-main = { path = "crates/main" }
+# for web request example
+reqwless = { version = "0.13.0", features = ["defmt"] }
+serde = { version = "1.0.203", default-features = false, features = ["derive"] }
+serde-json-core = "0.6.0"
+
+# for assign resources example
+assign-resources = { git = "https://github.com/adamgreig/assign-resources", rev = "bd22cb7a92031fb16f74a5da42469d466c33383e" }
+
+#cortex-m = { version = "0.7.6", features = ["critical-section-single-core"] }
+cortex-m = { version = "0.7.6", features = ["inline-asm"] }
+cortex-m-rt = "0.7.0"
+critical-section = "1.1"
+panic-probe = { version = "1.0.0", features = ["print-defmt"] }
+display-interface-spi = "0.5.0"
+embedded-graphics = "0.8.1"
+mipidsi = "0.9.0"
+display-interface = "0.5.0"
+byte-slice-cast = { version = "1.2.0", default-features = false }
+smart-leds = "0.4.0"
+heapless = "0.9.1"
+usbd-hid = "0.8.1"
+
+embedded-hal-1 = { package = "embedded-hal", version = "1.0" }
+embedded-hal-async = "1.0"
+embedded-hal-bus = { version = "0.3", features = ["async"] }
+embedded-io-async = { version = "0.6.1", features = ["defmt-03"] }
+embedded-storage = { version = "0.3" }
+static_cell = "2.1"
+portable-atomic = { version = "1.5", features = ["critical-section"] }
+log = "0.4"
+rand = { version = "0.9.0", default-features = false }
+embedded-sdmmc = "0.9.0"
 
 [profile.release]
-codegen-units = 1
+# Enable generation of debug symbols even on release builds
 debug = true
-lto = true
