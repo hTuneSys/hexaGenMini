@@ -1,6 +1,9 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = "probe-rs run --chip RP2040"
+
 [build]
 target-dir = "target"
-target = "thumbv6m-none-eabi"
+target = "thumbv6m-none-eabi" # Cortex-M0 and Cortex-M0+
 
-[target.thumbv6m-none-eabi]
-rustflags = ["-C", "link-arg=-Tlink.x", "-C", "link-arg=--gc-sections"]
+[env]
+DEFMT_LOG = "debug"
