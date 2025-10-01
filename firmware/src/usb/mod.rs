@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 hexaTune LLC
+// SPDX-License-Identifier: MIT
+
 use defmt::info;
 use embassy_usb::class::midi::MidiClass;
 use embassy_usb::{Builder, Config};

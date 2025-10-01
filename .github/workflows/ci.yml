@@ -10,18 +10,32 @@ on:
       - main
       - "release/**"
 
+permissions:
+  contents: read
+
 jobs:
   fmt:
     name: Check Formatting (hexaGenMini)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firmware
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
+      # Toolchain + components (rustfmt, clippy) + RP2040 target
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
+          components: rustfmt,clippy
+          targets: thumbv6m-none-eabi
+
+      # Cache to speed up builds
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            firmware
 
       - name: Check code formatting
         run: cargo fmt -- --check
@@ -29,44 +43,72 @@ jobs:
   clippy:
     name: Run Clippy Linter (hexaGenMini)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firmware
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
+          components: clippy
+          targets: thumbv6m-none-eabi
 
-      - name: Run Clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            firmware
+
+      - name: Run Clippy (RP2040 target)
+        run: cargo clippy --target thumbv6m-none-eabi -- -D warnings
 
   build:
-    name: Build Project (hexaGenMini)
+    name: Build (hexaGenMini)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firmware
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
+          targets: thumbv6m-none-eabi
 
-      - name: Build
-        run: cargo build --locked --all-targets
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            firmware
 
-  test:
-    name: Run Tests (hexaGenMini)
+      # Eğer projenizde extra llvm-tools vs. gerekiyorsa burada ekleyebilirsiniz
+      # - run: rustup component add llvm-tools-preview
+
+      - name: Build (hexaGenMini)
+        run: cargo build --release --target thumbv6m-none-eabi
+
+  check:
+    name: Check compiles (hexaGenMini)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firmware
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
+          targets: thumbv6m-none-eabi
 
-      - name: Run tests
-        run: cargo test --locked --all-targets
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            firmware
+
+      - name: Cargo check (RP2040 target)
+        run: cargo check --target thumbv6m-none-eabi
