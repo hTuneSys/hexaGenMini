@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2025 hexaTune LLC
+# SPDX-License-Identifier: MIT
 # ===== User config =====
 BIN        ?= hexagenmini
 TRIPLE     ?= thumbv6m-none-eabi
