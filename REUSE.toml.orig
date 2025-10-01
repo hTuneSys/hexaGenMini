@@ -1,0 +1,33 @@
+version = 1
+
+[[annotations]]
+<<<<<<< HEAD
+path = ["package.json", "CHANGELOG.md", ".gitignore", "docs/CNAME"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 hexaTune LLC"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["hardware/**", "mechanic/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 hexaTune LLC"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [
+  "firmware/.cargo/config.toml",
+  "firmware/Cargo.lock",
+  "firmware/memory.x",
+]
+=======
+path = ["package.json", "CHANGELOG.md"]
+>>>>>>> main
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 hexaTune LLC"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [".github/ISSUE_TEMPLATE/**", ".github/PULL_REQUEST_TEMPLATE.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 hexaTune LLC"
+SPDX-License-Identifier = "MIT"
