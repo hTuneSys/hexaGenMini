@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2025 hexaTune LLC
+# SPDX-License-Identifier: MIT
 # ===== User config =====
 BIN        ?= hexagenmini
 TRIPLE     ?= thumbv6m-none-eabi
@@ -24,7 +26,7 @@ all: load
 
 build: clean
 	@echo "==> Building ($(PROFILE)) to $(CARGO_TARGET_DIR) for $(TRIPLE)"
-	@$(CARGO) build --target $(TRIPLE) $(BUILD_FLAGS)
+	@$(CARGO) build -p main --target $(TRIPLE) $(BUILD_FLAGS)
 
 elf: build
 	@echo "==> Copying ELF to: $(ELF)"

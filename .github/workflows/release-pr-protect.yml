@@ -6,7 +6,7 @@ name: ❌ Block Non-Develop PRs to Release
 on:
   pull_request:
     branches:
-      - release/*
+      - release/**/*
     types: [opened, synchronize]
 
 jobs:
