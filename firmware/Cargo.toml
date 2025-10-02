@@ -87,6 +87,7 @@ byte-slice-cast = { version = "1.2.0", default-features = false }
 smart-leds = "0.4.0"
 heapless = "0.9.1"
 usbd-hid = "0.8.1"
+usbd-midi = "0.5.0"
 
 embedded-hal-1 = { package = "embedded-hal", version = "1.0" }
 embedded-hal-async = "1.0"
@@ -98,6 +99,8 @@ portable-atomic = { version = "1.5", features = ["critical-section"] }
 log = "0.4"
 rand = { version = "0.9.0", default-features = false }
 embedded-sdmmc = "0.9.0"
+base64ct = "1.8.0"
+async-trait = "0.1.89"
 
 [profile.release]
 # Enable generation of debug symbols even on release builds

@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
+use core::fmt::Write;
 use defmt::info;
 use embassy_usb::class::midi::MidiClass;
 use embassy_usb::{Builder, Config};
@@ -51,12 +52,76 @@ pub async fn dev_task(mut dev: MyUsbDevice<'static>) {
 }
 
 #[embassy_executor::task]
-pub async fn usb_io_task(mut midi: MyMidiClass<'static>) {
+pub async fn usb_io_task(
+    mut midi: MyMidiClass<'static>,
+    dispatcher: &'static crate::at::AtDispatcher,
+) {
     let mut buf = [0; 64];
     loop {
         let n = midi.read_packet(&mut buf).await.unwrap();
         let data = &buf[..n];
-        info!("data: {:x}", data);
-        midi.write_packet(data).await.unwrap();
+        info!("Received MIDI packet: {:?}", data);
+        if let Some(payload) = crate::sysex::extract_sysex_payload(data) {
+            if let Ok(input) = core::str::from_utf8(&payload) {
+                let response = dispatcher.dispatch(input);
+                info!("Received AT command: {}", input);
+                info!("AT response: {}", response.as_str());
+                if let Some(sysex) = crate::sysex::build_sysex::<64>(&response) {
+                    let packets = crate::sysex::sysex_to_usb_midi_packets::<64>(&sysex);
+                    for pkt in packets.iter() {
+                        match midi.write_packet(pkt).await {
+                            Ok(_) => {
+                                info!("Sent AT response via SysEx");
+                            }
+                            Err(e) => {
+                                info!("Failed to send MIDI packet: {:?}", e);
+                            }
+                        }
+                    }
+                } else {
+                    info!("Response too long to fit in SysEx");
+                }
+            } else {
+                let error = crate::error::Error::InvalidUtf8.description();
+                let encoded = crate::b64::encode(error);
+                let mut response = heapless::String::<64>::new();
+                write!(response, "AT+ERROR={}", encoded).unwrap();
+                if let Some(sysex) = crate::sysex::build_sysex::<64>(&response) {
+                    let packets = crate::sysex::sysex_to_usb_midi_packets::<64>(&sysex);
+                    for pkt in packets.iter() {
+                        match midi.write_packet(pkt).await {
+                            Ok(_) => {
+                                info!("Sent AT response via SysEx");
+                            }
+                            Err(e) => {
+                                info!("Failed to send MIDI packet: {:?}", e);
+                            }
+                        }
+                    }
+                } else {
+                    info!("Error response too long to fit in SysEx");
+                }
+            }
+        } else {
+            let error = crate::error::Error::InvalidSysEx.description();
+            let encoded = crate::b64::encode(error);
+            let mut response = heapless::String::<64>::new();
+            write!(response, "AT+ERROR={}", encoded).unwrap();
+            if let Some(sysex) = crate::sysex::build_sysex::<64>(&response) {
+                let packets = crate::sysex::sysex_to_usb_midi_packets::<64>(&sysex);
+                for pkt in packets.iter() {
+                    match midi.write_packet(pkt).await {
+                        Ok(_) => {
+                            info!("Sent AT response via SysEx");
+                        }
+                        Err(e) => {
+                            info!("Failed to send MIDI packet: {:?}", e);
+                        }
+                    }
+                }
+            } else {
+                info!("Error response too long to fit in SysEx");
+            }
+        }
     }
 }
