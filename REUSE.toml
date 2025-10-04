@@ -1,7 +1,14 @@
 version = 1
 
 [[annotations]]
-path = ["package.json", "CHANGELOG.md", ".gitignore", "docs/CNAME"]
+path = [
+  "package.json",
+  "CHANGELOG.md",
+  ".gitignore",
+  "docs/CNAME",
+  ".husky/**",
+  "package-lock.json",
+]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2025 hexaTune LLC"
 SPDX-License-Identifier = "MIT"
