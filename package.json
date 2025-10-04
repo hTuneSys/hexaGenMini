@@ -3,13 +3,34 @@
   "version": "0.0.0",
   "description": "Semantic-release metadata for hexaGenMini",
   "private": true,
-  "repository": "https://github.com/hTuneSys/hexaGenMini",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hTuneSys/hexaGenMini.git"
+  },
   "devDependencies": {
-    "semantic-release": "^22.0.0",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@semantic-release/changelog": "^6.0.0",
-    "@semantic-release/github": "^9.0.0",
-    "@semantic-release/git": "^10.0.0",
     "@semantic-release/commit-analyzer": "^9.0.0",
-    "@semantic-release/release-notes-generator": "^10.0.0"
-  }
+    "@semantic-release/git": "^10.0.0",
+    "@semantic-release/github": "^9.0.0",
+    "@semantic-release/release-notes-generator": "^10.0.0",
+    "husky": "^9.1.7",
+    "semantic-release": "^22.0.0"
+  },
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hTuneSys/hexaGenMini/issues"
+  },
+  "homepage": "https://github.com/hTuneSys/hexaGenMini#readme"
 }

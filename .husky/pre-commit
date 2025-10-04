@@ -1,0 +1,49 @@
+# Husky v10+: no shebang, no sourcing, POSIX-sh safe
+set -e
+
+# --- REUSE at repository root (strict check first) ---
+if ! command -v reuse >/dev/null 2>&1; then
+  echo "❌ REUSE tool is required but not installed."
+  echo "   Install it with: pip install reuse  OR  pipx install reuse"
+  exit 1
+fi
+
+echo "📜 REUSE license compliance (repo root)..."
+if ! reuse lint; then
+  echo "❌ REUSE license compliance failed."
+  exit 1
+fi
+
+# --- Rust checks inside firmware directory ---
+(
+  cd firmware || {
+    echo "⚠️  'firmware' directory not found."
+    exit 1
+  }
+
+  echo "🔍 Checking code formatting (cargo fmt)..."
+  if ! cargo fmt --all -- --check; then
+    echo "❌ Code formatting issues detected. Run: cargo fmt --all"
+    exit 1
+  fi
+
+  echo "🧠 Running Clippy (RP2040 target)..."
+  if ! cargo clippy --target thumbv6m-none-eabi -- -D warnings; then
+    echo "❌ Clippy failed with warnings/errors."
+    exit 1
+  fi
+
+  echo "🏗️ Building (release, RP2040 target)..."
+  if ! cargo build --release --target thumbv6m-none-eabi; then
+    echo "❌ Build failed."
+    exit 1
+  fi
+
+  echo "✅ cargo check (RP2040 target)..."
+  if ! cargo check --target thumbv6m-none-eabi; then
+    echo "❌ cargo check failed."
+    exit 1
+  fi
+)
+
+echo "✅ All checks passed! Proceeding with commit..."
