@@ -9,6 +9,8 @@ on:
       - develop
       - main
       - "release/**"
+    paths:
+      - "firmware/**"
 
 permissions:
   contents: read
