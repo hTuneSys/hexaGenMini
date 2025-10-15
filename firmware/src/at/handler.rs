@@ -23,6 +23,8 @@ pub trait AtHandler {
 pub enum Handler {
     Version(VersionHandler),
     SetRgb(SetRgbHandler),
+    Reset(ResetHandler),
+    FwUpdate(FwUpdateHandler),
 }
 
 pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
@@ -37,6 +39,18 @@ pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
     map.insert(
         String::<16>::try_from("SETRGB").unwrap(),
         Handler::SetRgb(SetRgbHandler),
+    )
+    .ok();
+
+    map.insert(
+        String::<16>::try_from("RESET").unwrap(),
+        Handler::Reset(ResetHandler),
+    )
+    .ok();
+
+    map.insert(
+        String::<16>::try_from("FWUPDATE").unwrap(),
+        Handler::FwUpdate(FwUpdateHandler),
     )
     .ok();
 

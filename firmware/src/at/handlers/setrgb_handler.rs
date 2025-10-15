@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use defmt::{error, info};
+use defmt::error;
 use embassy_executor::Spawner;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::Sender;
-use heapless::{String, Vec};
+use heapless::String;
 
-use crate::at::{AtCommand, AtHandler, compile_at_error};
-use crate::channel::{CAP, Msg, MsgDirection};
+use crate::at::AtHandler;
+use crate::channel::{CAP, Msg};
 use crate::error::Error;
 
 pub struct SetRgbHandler;

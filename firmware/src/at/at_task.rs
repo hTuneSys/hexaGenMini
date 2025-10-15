@@ -23,7 +23,7 @@ pub async fn at_task(
     loop {
         match at_rx.receive().await {
             Msg::AtCmd(MsgDirection::Input, line) => {
-                if let Some(e) = dispatcher.dispatch(spawner, at_tx, rgb_tx, &line) {
+                if let Some(e) = dispatcher.dispatch(spawner, at_tx, usb_tx, rgb_tx, &line) {
                     error!("Dispatch error: {:?}", &e.code());
                     let compiled = compile_at_error(e);
                     usb_tx.send(Msg::UsbTxLine(compiled)).await;

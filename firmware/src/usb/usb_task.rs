@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
+use core::sync::atomic::{AtomicBool, Ordering};
 use defmt::{error, info};
 use embassy_futures::select::{Either, select};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
@@ -21,7 +22,7 @@ pub async fn dev_task(mut dev: MyUsbDevice<'static>) {
 #[embassy_executor::task]
 pub async fn usb_io_task(
     midi: &'static Mutex<Cs, MyMidiClass<'static>>,
-    mut usb_rx: Receiver<'static, Cs, Msg, CAP>,
+    usb_rx: Receiver<'static, Cs, Msg, CAP>,
     at_tx: Sender<'static, Cs, Msg, CAP>,
 ) {
     info!("Starting unified USB IO task");
@@ -39,7 +40,6 @@ pub async fn usb_io_task(
         let tx_fut = async { usb_rx.receive().await };
 
         match select(read_fut, tx_fut).await {
-            // USB'DEN OKUNDU → AT'ye gönder
             Either::First((n, buf)) => {
                 let data = &buf[..n];
                 info!("Received MIDI packet: {:?}", data);
