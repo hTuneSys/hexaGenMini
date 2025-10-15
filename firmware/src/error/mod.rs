@@ -3,27 +3,30 @@
 
 #[derive(Debug, Clone)]
 pub enum Error {
-    InvalidCommand, // "Not an AT command"
-    InvalidBase64,  // "Invalid base64 param"
-    InvalidUtf8,    // "Invalid UTF-8 in param"
-    InvalidSysEx,   // "Invalid SysEx"
-    ParamCount,     // "Param count"
-    ParamValue,     // "Param value"
-    NotAQuery,      // "Not a query"
-    UnknownCommand, // "Unknown command"
+    InvalidCommand,    // "Not an AT command"
+    InvalidBase64,     // "Invalid base64 param"
+    InvalidUtf8,       // "Invalid UTF-8 in param"
+    InvalidSysEx,      // "Invalid SysEx"
+    InvalidDataLenght, // "Invalid data length"
+    ParamCount,        // "Param count"
+    ParamValue,        // "Param value"
+    NotAQuery,         // "Not a query"
+    UnknownCommand,    // "Unknown command"
 }
 
 impl Error {
-    pub fn description(&self) -> &'static str {
+    pub fn code(&self) -> &'static str {
         match self {
-            Error::InvalidCommand => "Not an AT command",
-            Error::InvalidBase64 => "Invalid base64 param",
-            Error::InvalidUtf8 => "Invalid UTF-8 in param",
-            Error::InvalidSysEx => "Invalid SysEx",
-            Error::ParamCount => "Invalid param count",
-            Error::ParamValue => "Invalid param value",
-            Error::NotAQuery => "Not a query",
-            Error::UnknownCommand => "Unknown command",
+            // Command errors
+            Error::InvalidCommand => "E001001",
+            Error::InvalidBase64 => "E001002",
+            Error::InvalidUtf8 => "E001003",
+            Error::InvalidSysEx => "E001004",
+            Error::InvalidDataLenght => "E001005",
+            Error::ParamCount => "E001006",
+            Error::ParamValue => "E001007",
+            Error::NotAQuery => "E001008",
+            Error::UnknownCommand => "E001009",
         }
     }
 }
