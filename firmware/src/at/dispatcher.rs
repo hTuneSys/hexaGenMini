@@ -27,6 +27,7 @@ impl AtDispatcher {
         &self,
         spawner: Spawner,
         at_tx: Sender<'static, Cs, Msg, CAP>,
+        usb_tx: Sender<'static, Cs, Msg, CAP>,
         rgb_tx: Sender<'static, Cs, Msg, CAP>,
         input: &str,
     ) -> Option<Error> {
@@ -40,6 +41,14 @@ impl AtDispatcher {
                     Handler::SetRgb(h) => {
                         info!("Dispatching SETRGB command");
                         h.handle(spawner, rgb_tx, &cmd.params, cmd.is_query)
+                    }
+                    Handler::Reset(h) => {
+                        info!("Dispatching RESET command");
+                        h.handle(spawner, at_tx, &cmd.params, cmd.is_query)
+                    }
+                    Handler::FwUpdate(h) => {
+                        info!("Dispatching FWUPDATE command");
+                        h.handle(spawner, at_tx, &cmd.params, cmd.is_query)
                     }
                 },
                 None => Some(Error::UnknownCommand),

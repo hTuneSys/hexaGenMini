@@ -4,9 +4,10 @@
 #![no_std]
 #![no_main]
 
+use core::cell::RefCell;
 use defmt::info;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::mutex::Mutex;
+use embassy_sync::mutex::Mutex as AsyncMutex;
 use {defmt_rtt as _, panic_probe as _};
 
 mod at;
@@ -18,16 +19,15 @@ mod rgb;
 mod sysex;
 mod usb;
 
+static CHANNEL_MANAGER: static_cell::StaticCell<channel::ChannelManager<{ channel::CAP }, 8>> =
+    static_cell::StaticCell::new();
+
 embassy_rp::bind_interrupts!(struct IrqUsb {
     USBCTRL_IRQ => embassy_rp::usb::InterruptHandler<embassy_rp::peripherals::USB>;
 });
-
 embassy_rp::bind_interrupts!(struct IrqPio {
     PIO0_IRQ_0 => embassy_rp::pio::InterruptHandler<embassy_rp::peripherals::PIO0>;
 });
-
-static CHANNEL_MANAGER: static_cell::StaticCell<channel::ChannelManager<{ channel::CAP }, 8>> =
-    static_cell::StaticCell::new();
 
 #[embassy_executor::main]
 async fn main(spawner: embassy_executor::Spawner) {
@@ -52,10 +52,11 @@ async fn main(spawner: embassy_executor::Spawner) {
     info!("Initializing USB");
     let driver = embassy_rp::usb::Driver::new(p.USB, IrqUsb);
     let usb::UsbMidi { device, midi } = usb::init(driver);
-    static MIDI_CELL: static_cell::StaticCell<Mutex<Cs, usb::MyMidiClass<'static>>> =
+
+    static MIDI_CELL: static_cell::StaticCell<AsyncMutex<Cs, usb::MyMidiClass<'static>>> =
         static_cell::StaticCell::new();
-    let midi_mutex: &'static Mutex<Cs, usb::MyMidiClass<'static>> =
-        MIDI_CELL.init(Mutex::new(midi));
+    let midi_mutex: &'static AsyncMutex<Cs, usb::MyMidiClass<'static>> =
+        MIDI_CELL.init(AsyncMutex::new(midi));
 
     //AT module
     info!("Initializing AT command dispatcher");
@@ -68,14 +69,14 @@ async fn main(spawner: embassy_executor::Spawner) {
         mut common, sm0, ..
     } = embassy_rp::pio::Pio::new(p.PIO0, IrqPio);
     let program = embassy_rp::pio_programs::ws2812::PioWs2812Program::new(&mut common);
-    let mut ws2812 = embassy_rp::pio_programs::ws2812::PioWs2812::new(
+    let ws2812 = embassy_rp::pio_programs::ws2812::PioWs2812::new(
         &mut common,
         sm0,
         p.DMA_CH0,
         p.PIN_23,
         &program,
     );
-    let mut rgb_led = rgb::RgbLed::new(ws2812);
+    let rgb_led = rgb::RgbLed::new(ws2812);
 
     //Spawn tasks
     info!("Spawning tasks");
@@ -85,6 +86,7 @@ async fn main(spawner: embassy_executor::Spawner) {
         ))
         .unwrap();
     spawner.spawn(usb::dev_task(device)).unwrap();
+    // midi_mutex now matches the expected type for usb_io_task (AsyncMutex<Cs, ...>)
     spawner
         .spawn(usb::usb_io_task(midi_mutex, usb_rx, at_tx))
         .unwrap();

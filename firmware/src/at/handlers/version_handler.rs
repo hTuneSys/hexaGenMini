@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use defmt::{error, info};
+use defmt::error;
 use embassy_executor::Spawner;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::Sender;
