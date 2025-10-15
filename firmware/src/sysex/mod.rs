@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use heapless::Vec as HVec;
+use heapless::Vec;
 
-pub fn build_sysex<const N: usize>(payload: &str) -> Option<HVec<u8, N>> {
-    let mut out: HVec<u8, N> = HVec::new();
+pub fn build_sysex<const N: usize>(payload: &str) -> Option<Vec<u8, N>> {
+    let mut out: Vec<u8, N> = Vec::new();
 
     // SysEx start
     out.push(0xF0).ok()?;
@@ -20,8 +20,7 @@ pub fn build_sysex<const N: usize>(payload: &str) -> Option<HVec<u8, N>> {
     Some(out)
 }
 
-pub fn sysex_to_usb_midi_packets<const M: usize>(sysex: &[u8]) -> heapless::Vec<[u8; 4], M> {
-    use heapless::Vec;
+pub fn sysex_to_usb_midi_packets<const M: usize>(sysex: &[u8]) -> Vec<[u8; 4], M> {
     let mut out: Vec<[u8; 4], M> = Vec::new();
 
     let mut i = 0usize;
@@ -46,8 +45,7 @@ pub fn sysex_to_usb_midi_packets<const M: usize>(sysex: &[u8]) -> heapless::Vec<
     out
 }
 
-pub fn extract_sysex_payload(data: &[u8]) -> Option<heapless::Vec<u8, 512>> {
-    use heapless::Vec;
+pub fn extract_sysex_payload(data: &[u8]) -> Option<Vec<u8, 512>> {
     let mut out: Vec<u8, 512> = Vec::new();
 
     for chunk in data.chunks_exact(4) {

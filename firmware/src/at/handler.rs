@@ -1,57 +1,44 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use core::fmt::Write;
+use embassy_executor::Spawner;
+use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
+use embassy_sync::channel::Sender;
+use heapless::{LinearMap, String};
 
-/// Trait for AT command handlers
+use crate::at::*;
+use crate::channel::{CAP, Msg};
+use crate::error::Error;
+
 pub trait AtHandler {
     fn handle(
         &self,
-        params: &[heapless::String<16>],
+        spawner: Spawner,
+        tx: Sender<'static, Cs, Msg, CAP>,
+        params: &[String<16>],
         is_query: bool,
-    ) -> Result<heapless::String<64>, crate::error::Error>;
+    ) -> Option<Error>;
 }
 
-/// Example: Version query handler
-pub struct VersionHandler;
-
-impl AtHandler for VersionHandler {
-    fn handle(
-        &self,
-        _params: &[heapless::String<16>],
-        is_query: bool,
-    ) -> Result<heapless::String<64>, crate::error::Error> {
-        if is_query {
-            let mut out = heapless::String::<64>::new();
-            out.push_str("1.2.3")
-                .map_err(|_| crate::error::Error::InvalidUtf8)?;
-            Ok(out)
-        } else {
-            Err(crate::error::Error::NotAQuery)
-        }
-    }
+pub enum Handler {
+    Version(VersionHandler),
+    SetRgb(SetRgbHandler),
 }
 
-/// Example: Sum handler (takes two params, returns their sum)
-pub struct SumHandler;
+pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
+    let mut map: LinearMap<String<16>, Handler, 8> = LinearMap::new();
 
-impl AtHandler for SumHandler {
-    fn handle(
-        &self,
-        params: &[heapless::String<16>],
-        _is_query: bool,
-    ) -> Result<heapless::String<64>, crate::error::Error> {
-        if params.len() != 2 {
-            return Err(crate::error::Error::ParamCount);
-        }
-        let a = params[0]
-            .parse::<i32>()
-            .map_err(|_| crate::error::Error::ParamValue)?;
-        let b = params[1]
-            .parse::<i32>()
-            .map_err(|_| crate::error::Error::ParamValue)?;
-        let mut out = heapless::String::<64>::new();
-        write!(out, "{}", a + b).map_err(|_| crate::error::Error::InvalidUtf8)?;
-        Ok(out)
-    }
+    map.insert(
+        String::<16>::try_from("VERSION").unwrap(),
+        Handler::Version(VersionHandler),
+    )
+    .ok();
+
+    map.insert(
+        String::<16>::try_from("SETRGB").unwrap(),
+        Handler::SetRgb(SetRgbHandler),
+    )
+    .ok();
+
+    map
 }

@@ -1,7 +1,4 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-mod usb_midi;
-pub use usb_midi::*;
-mod usb_task;
-pub use usb_task::*;
+pub const CONF_VERSION: &str = "v1.0.0";
