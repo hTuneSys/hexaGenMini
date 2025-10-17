@@ -27,7 +27,6 @@ impl AtDispatcher {
         &self,
         spawner: Spawner,
         at_tx: Sender<'static, Cs, Msg, CAP>,
-        usb_tx: Sender<'static, Cs, Msg, CAP>,
         rgb_tx: Sender<'static, Cs, Msg, CAP>,
         input: &str,
     ) -> Option<Error> {

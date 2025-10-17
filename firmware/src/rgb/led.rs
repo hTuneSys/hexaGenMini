@@ -23,7 +23,7 @@ impl RgbLed {
         self.led.write(&self.buf).await;
     }
 
-    pub async fn off(&mut self) {
+    /*pub async fn off(&mut self) {
         self.set_rgb(0, 0, 0).await;
-    }
+    }*/
 }

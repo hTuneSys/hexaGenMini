@@ -4,7 +4,6 @@
 #![no_std]
 #![no_main]
 
-use core::cell::RefCell;
 use defmt::info;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::mutex::Mutex as AsyncMutex;
