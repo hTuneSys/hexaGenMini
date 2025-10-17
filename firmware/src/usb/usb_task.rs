@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use core::sync::atomic::{AtomicBool, Ordering};
 use defmt::{error, info};
 use embassy_futures::select::{Either, select};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;

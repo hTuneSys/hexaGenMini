@@ -8,6 +8,7 @@ path = [
   "docs/CNAME",
   ".husky/**",
   "package-lock.json",
+  "pnpm-lock.yaml",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2025 hexaTune LLC"

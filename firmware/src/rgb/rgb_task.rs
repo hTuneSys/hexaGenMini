@@ -17,15 +17,12 @@ pub async fn rgb_task(
 ) {
     info!("Starting RGB task");
     loop {
-        match rgb_rx.receive().await {
-            Msg::RgbWithValue(r, g, b) => {
-                info!("Setting RGB to ({}, {}, {})", r, g, b);
-                rgb_led.set_rgb(r, g, b).await;
-                info!("RGB set");
-                info!("Sending OK from RGB task");
-                at_tx.send(Msg::Ok).await;
-            }
-            _ => {}
+        if let Msg::RgbWithValue(r, g, b) = rgb_rx.receive().await {
+            info!("Setting RGB to ({}, {}, {})", r, g, b);
+            rgb_led.set_rgb(r, g, b).await;
+            info!("RGB set");
+            info!("Sending OK from RGB task");
+            at_tx.send(Msg::Ok).await;
         }
     }
 }
