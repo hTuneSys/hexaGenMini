@@ -49,17 +49,15 @@ clean:
 	@echo "==> Cleaning $(CARGO_TARGET_DIR)"
 	@$(CARGO) clean
 
-monitor:
-	@PORT=$$(ls /dev/ttyACM* 2>/dev/null | head -n1); \
-	if [ -z "$$PORT" ]; then echo "No /dev/ttyACM* found. Is the device in application mode?"; exit 1; fi; \
-	echo "Opening $$PORT at 115200 baud..."; \
-	picocom -b 115200 $$PORT
+monitor: 
+	probe-rs run --chip RP2040 target/thumbv6m-none-eabi/debug/hexagenmini
 
 help:
 	@echo "Targets:"
-	@echo "  make build       - Build firmware ($(PROFILE) mode)"
-	@echo "  make elf         - Generate .elf file"
-	@echo "  make load        - Load firmware to device (requires BOOTSEL mode)"
-	@echo "  make clippy      - Run Clippy"
-	@echo "  make clean       - Clean build artifacts"
-	@echo "  make monitor     - Open serial monitor (115200 baud)"
+	@echo "  make build        - Build firmware ($(PROFILE) mode)"
+	@echo "  make elf          - Generate .elf file"
+	@echo "  make check-device - Check for RP2040 in BOOTSEL mode"
+	@echo "  make load         - Load firmware to device (requires BOOTSEL mode)"
+	@echo "  make clippy       - Run Clippy"
+	@echo "  make clean        - Clean build artifacts"
+	@echo "  make monitor      - Program and monitor via probe-rs"

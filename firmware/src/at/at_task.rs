@@ -18,18 +18,20 @@ pub async fn at_task(
     at_tx: Sender<'static, Cs, Msg, CAP>,
     usb_tx: Sender<'static, Cs, Msg, CAP>,
     rgb_tx: Sender<'static, Cs, Msg, CAP>,
+    dds_tx: Sender<'static, Cs, Msg, CAP>,
 ) {
     info!("Starting AT task");
     loop {
         match at_rx.receive().await {
             Msg::AtCmd(MsgDirection::Input, line) => {
-                if let Some(e) = dispatcher.dispatch(spawner, at_tx, rgb_tx, &line) {
+                if let Some(e) = dispatcher.dispatch(spawner, at_tx, rgb_tx, dds_tx, &line) {
                     error!("Dispatch error: {:?}", &e.code());
                     let compiled = compile_at_error(e);
                     usb_tx.send(Msg::UsbTxLine(compiled)).await;
                 }
             }
             Msg::AtCmd(MsgDirection::Output, line) => {
+                info!("Sending output: {}", line.as_str());
                 usb_tx.send(Msg::UsbTxLine(line)).await;
             }
             Msg::Ok => {

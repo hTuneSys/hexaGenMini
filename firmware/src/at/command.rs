@@ -4,10 +4,8 @@
 use defmt::info;
 use heapless::{String, Vec};
 
-use crate::b64::{b64_decode, b64_encode};
 use crate::error::Error;
 
-/// Parsed AT command
 pub struct AtCommand {
     pub name: String<16>,
     pub params: Vec<String<16>, 8>,
@@ -15,7 +13,6 @@ pub struct AtCommand {
 }
 
 impl AtCommand {
-    /// Compile AT command back into string
     pub fn compile(&self) -> String<64> {
         let mut s = String::<64>::new();
         s.push_str("AT+").unwrap();
@@ -28,16 +25,15 @@ impl AtCommand {
                 if i > 0 {
                     s.push('#').unwrap();
                 }
-                let encoded = b64_encode(p.as_str());
-                s.push_str(&encoded).unwrap();
+                s.push_str(p.as_str()).unwrap();
             }
         }
         s
     }
 }
 
-/// Parse AT command string into name, params, and query flag
 pub fn parse(input: &str) -> Result<AtCommand, Error> {
+    info!("Received input: {}", input);
     let input = input.trim();
     if !input.starts_with("AT+") {
         return Err(Error::InvalidCommand);
@@ -53,18 +49,9 @@ pub fn parse(input: &str) -> Result<AtCommand, Error> {
             .filter(|p| !p.is_empty())
         {
             info!("Parsing param: {}", p);
-            match b64_decode(p) {
-                Ok(decoded) => {
-                    info!("Decoded param: {}", decoded.as_str());
-                    let mut s_hl = String::<16>::new();
-                    s_hl.push_str(&decoded).map_err(|_| Error::InvalidUtf8)?;
-                    params.push(s_hl).map_err(|_| Error::ParamCount)?;
-                }
-                Err(_) => {
-                    info!("Base64 decode failed for param: {}", p);
-                    return Err(Error::InvalidBase64);
-                }
-            }
+            let mut s_hl = String::<16>::new();
+            s_hl.push_str(p).map_err(|_| Error::InvalidUtf8)?;
+            params.push(s_hl).map_err(|_| Error::ParamCount)?;
         }
         Ok(AtCommand {
             name: {

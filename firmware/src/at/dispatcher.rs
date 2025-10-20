@@ -28,6 +28,7 @@ impl AtDispatcher {
         spawner: Spawner,
         at_tx: Sender<'static, Cs, Msg, CAP>,
         rgb_tx: Sender<'static, Cs, Msg, CAP>,
+        dds_tx: Sender<'static, Cs, Msg, CAP>,
         input: &str,
     ) -> Option<Error> {
         match parse(input) {
@@ -48,6 +49,10 @@ impl AtDispatcher {
                     Handler::FwUpdate(h) => {
                         info!("Dispatching FWUPDATE command");
                         h.handle(spawner, at_tx, &cmd.params, cmd.is_query)
+                    }
+                    Handler::Freq(h) => {
+                        info!("Dispatching FREQ command");
+                        h.handle(spawner, dds_tx, &cmd.params, cmd.is_query)
                     }
                 },
                 None => Some(Error::UnknownCommand),
