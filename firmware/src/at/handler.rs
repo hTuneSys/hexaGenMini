@@ -25,6 +25,7 @@ pub enum Handler {
     SetRgb(SetRgbHandler),
     Reset(ResetHandler),
     FwUpdate(FwUpdateHandler),
+    Freq(FreqHandler),
 }
 
 pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
@@ -51,6 +52,12 @@ pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
     map.insert(
         String::<16>::try_from("FWUPDATE").unwrap(),
         Handler::FwUpdate(FwUpdateHandler),
+    )
+    .ok();
+
+    map.insert(
+        String::<16>::try_from("FREQ").unwrap(),
+        Handler::Freq(FreqHandler),
     )
     .ok();
 

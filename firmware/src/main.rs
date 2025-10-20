@@ -10,8 +10,8 @@ use embassy_sync::mutex::Mutex as AsyncMutex;
 use {defmt_rtt as _, panic_probe as _};
 
 mod at;
-mod b64;
 mod channel;
+mod dds;
 mod error;
 mod hexa_config;
 mod rgb;
@@ -40,12 +40,12 @@ async fn main(spawner: embassy_executor::Spawner) {
     let usb_rx = mgr.register(channel::ModuleId::Usb, &channel::USB_CH);
     let at_rx = mgr.register(channel::ModuleId::At, &channel::AT_CH);
     let rgb_rx = mgr.register(channel::ModuleId::Rgb, &channel::RGB_CH);
-    let _dds_rx = mgr.register(channel::ModuleId::Dds, &channel::DDS_CH);
+    let dds_rx = mgr.register(channel::ModuleId::Dds, &channel::DDS_CH);
     let mgr_ref: &'static channel::ChannelManager<{ channel::CAP }, 8> = CHANNEL_MANAGER.init(mgr);
     let at_tx = mgr_ref.tx(channel::ModuleId::At).unwrap();
     let usb_tx = mgr_ref.tx(channel::ModuleId::Usb).unwrap();
     let rgb_tx = mgr_ref.tx(channel::ModuleId::Rgb).unwrap();
-    //let dds_tx = mgr_ref.tx(channel::ModuleId::Dds).unwrap();
+    let dds_tx = mgr_ref.tx(channel::ModuleId::Dds).unwrap();
 
     //USB module
     info!("Initializing USB");
@@ -77,11 +77,21 @@ async fn main(spawner: embassy_executor::Spawner) {
     );
     let rgb_led = rgb::RgbLed::new(ws2812);
 
+    //DDS module
+    let ad9850 = dds::Ad985x::new(
+        embassy_rp::gpio::Output::new(p.PIN_2, embassy_rp::gpio::Level::Low),
+        embassy_rp::gpio::Output::new(p.PIN_3, embassy_rp::gpio::Level::Low),
+        embassy_rp::gpio::Output::new(p.PIN_4, embassy_rp::gpio::Level::Low),
+        embassy_rp::gpio::Output::new(p.PIN_5, embassy_rp::gpio::Level::Low),
+        125_000_000,
+        0,
+    );
+
     //Spawn tasks
     info!("Spawning tasks");
     spawner
         .spawn(at::at_task(
-            dispatcher, spawner, at_rx, at_tx, usb_tx, rgb_tx,
+            dispatcher, spawner, at_rx, at_tx, usb_tx, rgb_tx, dds_tx,
         ))
         .unwrap();
     spawner.spawn(usb::dev_task(device)).unwrap();
@@ -92,14 +102,22 @@ async fn main(spawner: embassy_executor::Spawner) {
     spawner
         .spawn(rgb::rgb_task(rgb_led, rgb_rx, at_tx))
         .unwrap();
+    spawner.spawn(dds::dds_task(ad9850, dds_rx, at_tx)).unwrap();
 
     //Dummy task to blink the LED
     let mut led = embassy_rp::gpio::Output::new(p.PIN_25, embassy_rp::gpio::Level::Low);
     loop {
         info!("Blink!");
-        led.set_high();
-        embassy_time::Timer::after_secs(5).await;
-        led.set_low();
-        embassy_time::Timer::after_secs(5).await;
+        if hexa_config::is_dds_available() {
+            led.set_high();
+            embassy_time::Timer::after_secs(5).await;
+            led.set_low();
+            embassy_time::Timer::after_secs(5).await;
+        } else {
+            led.set_high();
+            embassy_time::Timer::after_secs(1).await;
+            led.set_low();
+            embassy_time::Timer::after_secs(1).await;
+        }
     }
 }

@@ -4,7 +4,7 @@
 #[derive(Debug, Clone)]
 pub enum Error {
     InvalidCommand,    // "Not an AT command"
-    InvalidBase64,     // "Invalid base64 param"
+    DdsBusy,           // "DDS is busy"
     InvalidUtf8,       // "Invalid UTF-8 in param"
     InvalidSysEx,      // "Invalid SysEx"
     InvalidDataLenght, // "Invalid data length"
@@ -19,7 +19,7 @@ impl Error {
         match self {
             // Command errors
             Error::InvalidCommand => "E001001",
-            Error::InvalidBase64 => "E001002",
+            Error::DdsBusy => "E001002",
             Error::InvalidUtf8 => "E001003",
             Error::InvalidSysEx => "E001004",
             Error::InvalidDataLenght => "E001005",
