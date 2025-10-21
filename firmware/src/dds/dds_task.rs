@@ -34,10 +34,10 @@ pub async fn dds_task(
                     name.push_str("FREQ").unwrap();
 
                     let mut params = Vec::<String<16>, 8>::new();
-                    let ver = String::<16>::try_from(id).unwrap();
-                    params.push(ver).ok();
-                    let done = String::<16>::try_from("DONE").unwrap();
-                    params.push(done).ok();
+                    let id_param = String::<16>::try_from(id).unwrap();
+                    params.push(id_param).ok();
+                    let done_param = String::<16>::try_from("DONE").unwrap();
+                    params.push(done_param).ok();
 
                     let compiled = AtCommand {
                         name,

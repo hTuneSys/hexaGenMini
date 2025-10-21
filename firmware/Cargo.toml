@@ -8,7 +8,6 @@ version = "0.1.0"
 authors = ["Husamettin ARABACI <info@hexatune.com>"]
 edition = "2024"
 license = "MIT"
-license-file = "LICENSE"
 repository = "https://github.com/hTuneSys/hexaGenMini"
 homepage = "https://hexatune.com"
 keywords = ["rust", "firmware", "event-driven", "embedded", "hexaGenMini"]

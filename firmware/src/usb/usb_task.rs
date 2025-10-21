@@ -40,6 +40,9 @@ pub async fn usb_io_task(
 
         match select(read_fut, tx_fut).await {
             Either::First((n, buf)) => {
+                if n == 0 {
+                    continue;
+                }
                 let data = &buf[..n];
                 info!("Received MIDI packet: {:?}", data);
 
@@ -50,8 +53,8 @@ pub async fn usb_io_task(
                                 at_tx.send(Msg::AtCmd(MsgDirection::Input, line)).await;
                             }
                             Err(_) => {
-                                error!("Error Code: {}", Error::InvalidDataLenght.code());
-                                at_tx.send(Msg::Err(Error::InvalidDataLenght)).await;
+                                error!("Error Code: {}", Error::InvalidDataLength.code());
+                                at_tx.send(Msg::Err(Error::InvalidDataLength)).await;
                             }
                         }
                     } else {
@@ -70,9 +73,9 @@ pub async fn usb_io_task(
                         let packets = sysex_to_usb_midi_packets::<64>(&sysex);
                         info!("Sending {} MIDI packets", packets.len());
 
+                        let mut m = midi.lock().await;
                         for pkt in packets.iter() {
                             info!("Sending MIDI packet: {:?}", pkt);
-                            let mut m = midi.lock().await;
                             if let Err(e) = m.write_packet(pkt).await {
                                 error!("USB write error: {:?}", e);
                             }
