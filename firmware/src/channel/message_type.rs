@@ -3,20 +3,21 @@
 
 use heapless::String;
 
+use crate::at::AtCommand;
 use crate::error::Error;
 
-pub enum MsgDirection {
-    Input,
-    Output,
-}
+pub type MsgId = String<16>;
+pub type MsgString = String<64>;
+pub type IsDdsAvailable = bool;
 
 pub enum Msg {
-    AtCmd(MsgDirection, String<64>),
-    Ok,
-    Err(Error),
-    UsbTxLine(String<64>),
-    ///RGB value message with R, G, B u8 values
-    RgbWithValue(u8, u8, u8),
-    ///Frequency message with ID, frequency in Hz, and time in ms
-    FreqWithValue(String<16>, u32, u32),
+    AtRxLine(MsgString),
+    AtCmdOutput(AtCommand),
+    Done(MsgId),
+    Err(MsgId, Error),
+    ErrWOCommand(Error),
+    UsbTxLine(MsgString),
+    RgbWithValue(AtCommand),
+    FreqWithValue(AtCommand),
+    SetDdsAvailable(IsDdsAvailable),
 }

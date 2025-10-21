@@ -3,12 +3,14 @@
 
 use core::sync::atomic::{AtomicBool, Ordering};
 
+//General configuration constants
 pub const CONF_VERSION: &str = "v1.0.0";
 
-pub static DDS_GENERATING: AtomicBool = AtomicBool::new(false);
-pub fn set_dds_status(status: bool) {
-    DDS_GENERATING.store(status, Ordering::SeqCst);
+//DDS status tracking
+pub static DDS_AVAILABLE: AtomicBool = AtomicBool::new(true);
+pub fn set_dds_available(status: bool) {
+    DDS_AVAILABLE.store(status, Ordering::SeqCst);
 }
 pub fn is_dds_available() -> bool {
-    !DDS_GENERATING.load(Ordering::SeqCst)
+    DDS_AVAILABLE.load(Ordering::SeqCst)
 }

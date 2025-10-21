@@ -36,23 +36,23 @@ impl AtDispatcher {
                 Some(handler) => match handler {
                     Handler::Version(h) => {
                         info!("Dispatching VERSION command");
-                        h.handle(spawner, at_tx, &cmd.params, cmd.is_query)
+                        h.handle(spawner, at_tx, cmd)
                     }
                     Handler::SetRgb(h) => {
                         info!("Dispatching SETRGB command");
-                        h.handle(spawner, rgb_tx, &cmd.params, cmd.is_query)
+                        h.handle(spawner, rgb_tx, cmd)
                     }
                     Handler::Reset(h) => {
                         info!("Dispatching RESET command");
-                        h.handle(spawner, at_tx, &cmd.params, cmd.is_query)
+                        h.handle(spawner, at_tx, cmd)
                     }
                     Handler::FwUpdate(h) => {
                         info!("Dispatching FWUPDATE command");
-                        h.handle(spawner, at_tx, &cmd.params, cmd.is_query)
+                        h.handle(spawner, at_tx, cmd)
                     }
                     Handler::Freq(h) => {
                         info!("Dispatching FREQ command");
-                        h.handle(spawner, dds_tx, &cmd.params, cmd.is_query)
+                        h.handle(spawner, dds_tx, cmd)
                     }
                 },
                 None => Some(Error::UnknownCommand),

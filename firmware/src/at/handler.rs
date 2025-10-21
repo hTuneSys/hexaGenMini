@@ -15,8 +15,7 @@ pub trait AtHandler {
         &self,
         spawner: Spawner,
         tx: Sender<'static, Cs, Msg, CAP>,
-        params: &[String<16>],
-        is_query: bool,
+        at_command: AtCommand,
     ) -> Option<Error>;
 }
 

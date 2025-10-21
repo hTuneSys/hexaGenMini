@@ -7,7 +7,7 @@ use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::{Receiver, Sender};
 use embassy_sync::mutex::Mutex;
 
-use crate::channel::{CAP, Msg, MsgDirection};
+use crate::channel::{CAP, Msg};
 use crate::error::Error;
 use crate::sysex::{build_sysex, extract_sysex_payload, sysex_to_usb_midi_packets};
 use crate::usb::{MyMidiClass, MyUsbDevice};
@@ -25,7 +25,6 @@ pub async fn usb_io_task(
     at_tx: Sender<'static, Cs, Msg, CAP>,
 ) {
     info!("Starting unified USB IO task");
-
     loop {
         let read_fut = async {
             let mut buf = [0u8; 64];
@@ -50,20 +49,22 @@ pub async fn usb_io_task(
                     if let Ok(input) = core::str::from_utf8(&payload) {
                         match heapless::String::<64>::try_from(input) {
                             Ok(line) => {
-                                at_tx.send(Msg::AtCmd(MsgDirection::Input, line)).await;
+                                at_tx.send(Msg::AtRxLine(line)).await;
                             }
                             Err(_) => {
                                 error!("Error Code: {}", Error::InvalidDataLength.code());
-                                at_tx.send(Msg::Err(Error::InvalidDataLength)).await;
+                                at_tx
+                                    .send(Msg::ErrWOCommand(Error::InvalidDataLength))
+                                    .await;
                             }
                         }
                     } else {
                         error!("Error Code: {}", Error::InvalidUtf8.code());
-                        at_tx.send(Msg::Err(Error::InvalidUtf8)).await;
+                        at_tx.send(Msg::ErrWOCommand(Error::InvalidUtf8)).await;
                     }
                 } else {
                     error!("Error Code: {}", Error::InvalidSysEx.code());
-                    at_tx.send(Msg::Err(Error::InvalidSysEx)).await;
+                    at_tx.send(Msg::ErrWOCommand(Error::InvalidSysEx)).await;
                 }
             }
 

@@ -7,8 +7,8 @@ use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::Sender;
 use heapless::{String, Vec};
 
-use crate::at::{AtCommand, AtHandler};
-use crate::channel::{CAP, Msg, MsgDirection};
+use crate::at::*;
+use crate::channel::{CAP, Msg};
 use crate::error::Error;
 use crate::hexa_config::CONF_VERSION;
 
@@ -19,10 +19,9 @@ impl AtHandler for VersionHandler {
         &self,
         spawner: Spawner,
         at_tx: Sender<'static, Cs, Msg, CAP>,
-        _params: &[String<16>],
-        is_query: bool,
+        at_command: AtCommand,
     ) -> Option<Error> {
-        if is_query {
+        if at_command.is_query {
             let _ = spawner.spawn(version_task(at_tx));
             None
         } else {
@@ -41,11 +40,11 @@ async fn version_task(at_tx: Sender<'static, Cs, Msg, CAP>) {
     let version_param = String::<16>::try_from(CONF_VERSION).unwrap();
     params.push(version_param).ok();
 
-    let compiled = AtCommand {
+    let at_command = AtCommand {
+        id: get_empty_id(),
         name,
         params,
         is_query: false,
-    }
-    .compile();
-    at_tx.send(Msg::AtCmd(MsgDirection::Output, compiled)).await;
+    };
+    at_tx.send(Msg::AtCmdOutput(at_command)).await;
 }
