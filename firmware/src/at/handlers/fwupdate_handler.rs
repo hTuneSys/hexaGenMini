@@ -5,9 +5,8 @@ use defmt::info;
 use embassy_executor::Spawner;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::Sender;
-use heapless::String;
 
-use crate::at::AtHandler;
+use crate::at::*;
 use crate::channel::{CAP, Msg};
 use crate::error::Error;
 
@@ -18,8 +17,7 @@ impl AtHandler for FwUpdateHandler {
         &self,
         spawner: Spawner,
         _at_tx: Sender<'static, Cs, Msg, CAP>,
-        _params: &[String<16>],
-        _is_query: bool,
+        _at_command: AtCommand,
     ) -> Option<Error> {
         info!("Firmware update requested - spawning BOOTSEL task");
         let _ = spawner.spawn(fwupdate_task());

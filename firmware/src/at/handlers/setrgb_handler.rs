@@ -1,13 +1,11 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use defmt::error;
 use embassy_executor::Spawner;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::Sender;
-use heapless::String;
 
-use crate::at::AtHandler;
+use crate::at::{AtCommand, AtHandler};
 use crate::channel::{CAP, Msg};
 use crate::error::Error;
 
@@ -18,32 +16,14 @@ impl AtHandler for SetRgbHandler {
         &self,
         spawner: Spawner,
         rgb_tx: Sender<'static, Cs, Msg, CAP>,
-        params: &[String<16>],
-        _is_query: bool,
+        at_command: AtCommand,
     ) -> Option<Error> {
-        if params.len() != 3 {
-            error!("SETRGB command requires 3 parameters, got {}", params.len());
-            return Some(Error::ParamCount);
-        }
-        // check params are u8
-        let r = match params[0].parse::<u8>() {
-            Ok(v) => v,
-            Err(_) => return Some(Error::ParamValue),
-        };
-        let g = match params[1].parse::<u8>() {
-            Ok(v) => v,
-            Err(_) => return Some(Error::ParamValue),
-        };
-        let b = match params[2].parse::<u8>() {
-            Ok(v) => v,
-            Err(_) => return Some(Error::ParamValue),
-        };
-        let _ = spawner.spawn(setrgb_task(rgb_tx, r, g, b));
+        let _ = spawner.spawn(setrgb_task(rgb_tx, at_command));
         None
     }
 }
 
 #[embassy_executor::task]
-async fn setrgb_task(rgb_tx: Sender<'static, Cs, Msg, CAP>, r: u8, g: u8, b: u8) {
-    rgb_tx.send(Msg::RgbWithValue(r, g, b)).await;
+async fn setrgb_task(rgb_tx: Sender<'static, Cs, Msg, CAP>, at_command: AtCommand) {
+    rgb_tx.send(Msg::RgbWithValue(at_command)).await;
 }

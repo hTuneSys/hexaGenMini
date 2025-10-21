@@ -1,18 +1,14 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use defmt::info;
+use defmt::*;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::{Receiver, Sender};
-use heapless::{String, Vec};
 use {defmt_rtt as _, panic_probe as _};
 
-use crate::at::AtCommand;
-use crate::channel::MsgDirection;
 use crate::channel::{CAP, Msg};
 use crate::dds::Ad985x;
 use crate::error::Error;
-use crate::hexa_config::*;
 
 #[embassy_executor::task]
 pub async fn dds_task(
@@ -22,35 +18,45 @@ pub async fn dds_task(
 ) {
     info!("Starting DDS task");
     loop {
-        if let Msg::FreqWithValue(id, freq, time_ms) = dds_rx.receive().await {
-            if is_dds_available() {
-                set_dds_status(true);
-                info!("Setting FREQ to ({}) over {} ms", id.as_str(), time_ms);
-                if let Some(err) = ad985x.set_freq(freq, time_ms).await {
-                    info!("Error setting FREQ: {:?}", err.code());
-                    at_tx.send(Msg::Err(err)).await;
-                } else {
-                    let mut name = String::<16>::new();
-                    name.push_str("FREQ").unwrap();
-
-                    let mut params = Vec::<String<16>, 8>::new();
-                    let id_param = String::<16>::try_from(id).unwrap();
-                    params.push(id_param).ok();
-                    let done_param = String::<16>::try_from("DONE").unwrap();
-                    params.push(done_param).ok();
-
-                    let compiled = AtCommand {
-                        name,
-                        params,
-                        is_query: false,
-                    }
-                    .compile();
-                    at_tx.send(Msg::AtCmd(MsgDirection::Output, compiled)).await;
+        if let Msg::FreqWithValue(at_command) = dds_rx.receive().await {
+            if at_command.params.len() != 2 {
+                error!(
+                    "FREQ command requires 3 parameters, got {}",
+                    at_command.params.len()
+                );
+                at_tx.send(Msg::Err(at_command.id, Error::DdsBusy)).await;
+                return;
+            }
+            let freq = match at_command.params[0].parse::<u32>() {
+                Ok(v) => v,
+                Err(_) => {
+                    error!("Invalid frequency value: {}", at_command.id.as_str());
+                    at_tx.send(Msg::Err(at_command.id, Error::ParamValue)).await;
+                    return;
                 }
-                set_dds_status(false);
+            };
+            let time_ms = match at_command.params[1].parse::<u32>() {
+                Ok(v) => v,
+                Err(_) => {
+                    error!("Invalid time_ms value: {}", at_command.id.as_str());
+                    at_tx.send(Msg::Err(at_command.id, Error::ParamValue)).await;
+                    return;
+                }
+            };
+
+            at_tx.send(Msg::SetDdsAvailable(false)).await;
+            info!(
+                "Setting FREQ to ({}) over {} ms",
+                at_command.id.as_str(),
+                time_ms
+            );
+            let err = ad985x.set_freq(freq, time_ms).await;
+            at_tx.send(Msg::SetDdsAvailable(true)).await;
+            if let Some(err) = err {
+                error!("Error setting FREQ: {:?}", err.code());
+                at_tx.send(Msg::Err(at_command.id, err)).await;
             } else {
-                info!("DDS busy, cannot set FREQ ({})", id.as_str());
-                at_tx.send(Msg::Err(Error::DdsBusy)).await;
+                at_tx.send(Msg::Done(at_command.id)).await;
             }
         }
     }

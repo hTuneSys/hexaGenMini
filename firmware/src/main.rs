@@ -112,6 +112,8 @@ async fn main(_spawner: embassy_executor::Spawner) {
     //Core0 Task Spawner
     let executor0 = EXECUTOR0.init(embassy_executor::Executor::new());
     executor0.run(|spawner| {
+        //RGB task
+        unwrap!(spawner.spawn(rgb::rgb_task(rgb_led, rgb_rx, at_tx)));
         //AT tasks
         unwrap!(spawner.spawn(at::at_task(
             dispatcher, spawner, at_rx, at_tx, usb_tx, rgb_tx, dds_tx,
@@ -120,8 +122,6 @@ async fn main(_spawner: embassy_executor::Spawner) {
         unwrap!(spawner.spawn(usb::dev_task(device)));
         //USB IO task
         unwrap!(spawner.spawn(usb::usb_io_task(midi_mutex, usb_rx, at_tx)));
-        //RGB task
-        unwrap!(spawner.spawn(rgb::rgb_task(rgb_led, rgb_rx, at_tx)));
         //Main loop task
         unwrap!(spawner.spawn(main_loop_task(at_tx, led)));
     });
@@ -133,7 +133,6 @@ pub async fn main_loop_task(
     mut led: embassy_rp::gpio::Output<'static>,
 ) {
     //Dummy task to blink the LED
-
     loop {
         info!("Blink!");
         let mut name = String::<16>::new();
@@ -157,14 +156,12 @@ pub async fn main_loop_task(
             }
         }
         params.push(status_param).ok();
-        let compiled = at::AtCommand {
+        let at_command = at::AtCommand {
+            id: at::get_empty_id(),
             name,
             params,
             is_query: false,
-        }
-        .compile();
-        at_tx
-            .send(channel::Msg::AtCmd(channel::MsgDirection::Output, compiled))
-            .await;
+        };
+        at_tx.send(channel::Msg::AtCmdOutput(at_command)).await;
     }
 }
