@@ -38,8 +38,8 @@ async fn version_task(at_tx: Sender<'static, Cs, Msg, CAP>) {
     name.push_str("VERSION").unwrap();
 
     let mut params = Vec::<String<16>, 8>::new();
-    let ver = String::<16>::try_from(CONF_VERSION).unwrap();
-    params.push(ver).ok();
+    let version_param = String::<16>::try_from(CONF_VERSION).unwrap();
+    params.push(version_param).ok();
 
     let compiled = AtCommand {
         name,

@@ -4,9 +4,10 @@
 #![no_std]
 #![no_main]
 
-use defmt::info;
+use defmt::*;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::mutex::Mutex as AsyncMutex;
+use heapless::{String, Vec};
 use {defmt_rtt as _, panic_probe as _};
 
 mod at;
@@ -18,6 +19,13 @@ mod rgb;
 mod sysex;
 mod usb;
 
+use crate::channel::CAP;
+
+static mut CORE1_STACK: embassy_rp::multicore::Stack<4096> = embassy_rp::multicore::Stack::new();
+static EXECUTOR0: static_cell::StaticCell<embassy_executor::Executor> =
+    static_cell::StaticCell::new();
+static EXECUTOR1: static_cell::StaticCell<embassy_executor::Executor> =
+    static_cell::StaticCell::new();
 static CHANNEL_MANAGER: static_cell::StaticCell<channel::ChannelManager<{ channel::CAP }, 8>> =
     static_cell::StaticCell::new();
 
@@ -29,7 +37,7 @@ embassy_rp::bind_interrupts!(struct IrqPio {
 });
 
 #[embassy_executor::main]
-async fn main(spawner: embassy_executor::Spawner) {
+async fn main(_spawner: embassy_executor::Spawner) {
     //Initialize the RP2040
     let p = embassy_rp::init(Default::default());
     info!("Starting hexaGenMini firmware");
@@ -87,37 +95,76 @@ async fn main(spawner: embassy_executor::Spawner) {
         0,
     );
 
-    //Spawn tasks
-    info!("Spawning tasks");
-    spawner
-        .spawn(at::at_task(
-            dispatcher, spawner, at_rx, at_tx, usb_tx, rgb_tx, dds_tx,
-        ))
-        .unwrap();
-    spawner.spawn(usb::dev_task(device)).unwrap();
-    // midi_mutex now matches the expected type for usb_io_task (AsyncMutex<Cs, ...>)
-    spawner
-        .spawn(usb::usb_io_task(midi_mutex, usb_rx, at_tx))
-        .unwrap();
-    spawner
-        .spawn(rgb::rgb_task(rgb_led, rgb_rx, at_tx))
-        .unwrap();
-    spawner.spawn(dds::dds_task(ad9850, dds_rx, at_tx)).unwrap();
+    //Dummy Led
+    let led = embassy_rp::gpio::Output::new(p.PIN_25, embassy_rp::gpio::Level::Low);
 
+    embassy_rp::multicore::spawn_core1(
+        p.CORE1,
+        unsafe { &mut *core::ptr::addr_of_mut!(CORE1_STACK) },
+        move || {
+            let executor1 = EXECUTOR1.init(embassy_executor::Executor::new());
+            executor1.run(|spawner| {
+                unwrap!(spawner.spawn(dds::dds_task(ad9850, dds_rx, at_tx)));
+            });
+        },
+    );
+
+    //Core0 Task Spawner
+    let executor0 = EXECUTOR0.init(embassy_executor::Executor::new());
+    executor0.run(|spawner| {
+        //AT tasks
+        unwrap!(spawner.spawn(at::at_task(
+            dispatcher, spawner, at_rx, at_tx, usb_tx, rgb_tx, dds_tx,
+        )));
+        //USB Device task
+        unwrap!(spawner.spawn(usb::dev_task(device)));
+        //USB IO task
+        unwrap!(spawner.spawn(usb::usb_io_task(midi_mutex, usb_rx, at_tx)));
+        //RGB task
+        unwrap!(spawner.spawn(rgb::rgb_task(rgb_led, rgb_rx, at_tx)));
+        //Main loop task
+        unwrap!(spawner.spawn(main_loop_task(at_tx, led)));
+    });
+}
+
+#[embassy_executor::task]
+pub async fn main_loop_task(
+    at_tx: embassy_sync::channel::Sender<'static, Cs, channel::Msg, CAP>,
+    mut led: embassy_rp::gpio::Output<'static>,
+) {
     //Dummy task to blink the LED
-    let mut led = embassy_rp::gpio::Output::new(p.PIN_25, embassy_rp::gpio::Level::Low);
+
     loop {
         info!("Blink!");
+        let mut name = String::<16>::new();
+        name.push_str("STATUS").unwrap();
+
+        let mut params = Vec::<String<16>, 8>::new();
+        let mut status_param = String::<16>::try_from("AVAILABLE").unwrap();
+
         if hexa_config::is_dds_available() {
             led.set_high();
             embassy_time::Timer::after_secs(5).await;
             led.set_low();
             embassy_time::Timer::after_secs(5).await;
         } else {
-            led.set_high();
-            embassy_time::Timer::after_secs(1).await;
-            led.set_low();
-            embassy_time::Timer::after_secs(1).await;
+            status_param = String::<16>::try_from("GENERATING").unwrap();
+            for _ in 0..5 {
+                led.set_high();
+                embassy_time::Timer::after_secs(1).await;
+                led.set_low();
+                embassy_time::Timer::after_secs(1).await;
+            }
         }
+        params.push(status_param).ok();
+        let compiled = at::AtCommand {
+            name,
+            params,
+            is_query: false,
+        }
+        .compile();
+        at_tx
+            .send(channel::Msg::AtCmd(channel::MsgDirection::Output, compiled))
+            .await;
     }
 }
