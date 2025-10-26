@@ -15,7 +15,6 @@ pub enum Msg {
     AtCmdOutput(AtCommand),
     Done(MsgId),
     Err(MsgId, Error),
-    ErrWOCommand(Error),
     UsbTxLine(MsgString),
     RgbWithValue(AtCommand),
     FreqWithValue(AtCommand),

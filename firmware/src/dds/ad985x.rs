@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
+use defmt::*;
 use embassy_rp::gpio::Output;
 use embassy_time::{Duration, Timer};
 
@@ -124,9 +125,9 @@ impl Ad985x {
         if let Some(e) = self.set_freq_immediate(freq_hz).await {
             return Some(e);
         }
-
+        info!("Waiting time ms {}", dwell_ms);
         Timer::after(Duration::from_millis(dwell_ms as u64)).await;
-
+        info!("Wait complete");
         if let Some(e) = self.down().await {
             return Some(e);
         }

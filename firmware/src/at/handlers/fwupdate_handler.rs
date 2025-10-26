@@ -3,22 +3,14 @@
 
 use defmt::info;
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::Sender;
 
 use crate::at::*;
-use crate::channel::{CAP, Msg};
 use crate::error::Error;
 
 pub struct FwUpdateHandler;
 
 impl AtHandler for FwUpdateHandler {
-    fn handle(
-        &self,
-        spawner: Spawner,
-        _at_tx: Sender<'static, Cs, Msg, CAP>,
-        _at_command: AtCommand,
-    ) -> Option<Error> {
+    fn handle(&self, spawner: Spawner, _at_command: AtCommand) -> Option<Error> {
         info!("Firmware update requested - spawning BOOTSEL task");
         let _ = spawner.spawn(fwupdate_task());
         None

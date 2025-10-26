@@ -2,21 +2,13 @@
 // SPDX-License-Identifier: MIT
 
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::Sender;
 use heapless::{LinearMap, String};
 
 use crate::at::*;
-use crate::channel::{CAP, Msg};
 use crate::error::Error;
 
 pub trait AtHandler {
-    fn handle(
-        &self,
-        spawner: Spawner,
-        tx: Sender<'static, Cs, Msg, CAP>,
-        at_command: AtCommand,
-    ) -> Option<Error>;
+    fn handle(&self, spawner: Spawner, at_command: AtCommand) -> Option<Error>;
 }
 
 pub enum Handler {

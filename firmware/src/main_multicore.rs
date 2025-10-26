@@ -8,6 +8,7 @@ use defmt::*;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::channel::Channel;
 use embassy_sync::mutex::Mutex as AsyncMutex;
+use heapless::{String, Vec};
 use {defmt_rtt as _, panic_probe as _};
 
 mod at;
@@ -26,6 +27,12 @@ pub static AT_CH: Channel<Cs, Msg, CAP> = Channel::new();
 pub static RGB_CH: Channel<Cs, Msg, CAP> = Channel::new();
 pub static DDS_CH: Channel<Cs, Msg, CAP> = Channel::new();
 
+static mut CORE1_STACK: embassy_rp::multicore::Stack<4096> = embassy_rp::multicore::Stack::new();
+static EXECUTOR0: static_cell::StaticCell<embassy_executor::Executor> =
+    static_cell::StaticCell::new();
+static EXECUTOR1: static_cell::StaticCell<embassy_executor::Executor> =
+    static_cell::StaticCell::new();
+
 embassy_rp::bind_interrupts!(struct IrqUsb {
     USBCTRL_IRQ => embassy_rp::usb::InterruptHandler<embassy_rp::peripherals::USB>;
 });
@@ -34,7 +41,7 @@ embassy_rp::bind_interrupts!(struct IrqPio {
 });
 
 #[embassy_executor::main]
-async fn main(spawner: embassy_executor::Spawner) {
+async fn main(_spawner: embassy_executor::Spawner) {
     //Initialize the RP2040
     let p = embassy_rp::init(Default::default());
     info!("Starting hexaGenMini firmware");
@@ -82,12 +89,31 @@ async fn main(spawner: embassy_executor::Spawner) {
     //Dummy Led
     let led = embassy_rp::gpio::Output::new(p.PIN_25, embassy_rp::gpio::Level::Low);
 
-    spawner.spawn(at::at_task(dispatcher, spawner)).unwrap();
-    spawner.spawn(rgb::rgb_task(rgb_led)).unwrap();
-    spawner.spawn(usb::dev_task(device)).unwrap();
-    spawner.spawn(usb::usb_io_task(midi_mutex)).unwrap();
-    spawner.spawn(dds::dds_task(ad9850)).unwrap();
-    spawner.spawn(main_loop_task(led)).unwrap();
+    embassy_rp::multicore::spawn_core1(
+        p.CORE1,
+        unsafe { &mut *core::ptr::addr_of_mut!(CORE1_STACK) },
+        move || {
+            let executor1 = EXECUTOR1.init(embassy_executor::Executor::new());
+            executor1.run(|spawner| {
+                unwrap!(spawner.spawn(dds::dds_task(ad9850)));
+            });
+        },
+    );
+
+    //Core0 Task Spawner
+    let executor0 = EXECUTOR0.init(embassy_executor::Executor::new());
+    executor0.run(|spawner| {
+        //RGB task
+        unwrap!(spawner.spawn(rgb::rgb_task(rgb_led)));
+        //AT tasks
+        unwrap!(spawner.spawn(at::at_task(dispatcher, spawner)));
+        //USB Device task
+        unwrap!(spawner.spawn(usb::dev_task(device)));
+        //USB IO task
+        unwrap!(spawner.spawn(usb::usb_io_task(midi_mutex)));
+        //Main loop task
+        unwrap!(spawner.spawn(main_loop_task(led)));
+    });
 }
 
 #[embassy_executor::task]
@@ -95,11 +121,11 @@ pub async fn main_loop_task(mut led: embassy_rp::gpio::Output<'static>) {
     //Dummy task to blink the LED
     loop {
         info!("Blink!");
-        /*let mut name = String::<16>::new();
+        let mut name = String::<16>::new();
         name.push_str("STATUS").unwrap();
 
         let mut params = Vec::<String<16>, 8>::new();
-        let mut status_param = String::<16>::try_from("AVAILABLE").unwrap();*/
+        let mut status_param = String::<16>::try_from("AVAILABLE").unwrap();
 
         if hexa_config::is_dds_available() {
             led.set_high();
@@ -107,21 +133,21 @@ pub async fn main_loop_task(mut led: embassy_rp::gpio::Output<'static>) {
             led.set_low();
             embassy_time::Timer::after_secs(5).await;
         } else {
-            //status_param = String::<16>::try_from("GENERATING").unwrap();
-            for _ in 0..50 {
+            status_param = String::<16>::try_from("GENERATING").unwrap();
+            for _ in 0..5 {
                 led.set_high();
-                embassy_time::Timer::after_millis(100).await;
+                embassy_time::Timer::after_secs(1).await;
                 led.set_low();
-                embassy_time::Timer::after_millis(100).await;
+                embassy_time::Timer::after_secs(1).await;
             }
         }
-        /*params.push(status_param).ok();
+        params.push(status_param).ok();
         let at_command = at::AtCommand {
             id: at::get_empty_id(),
             name,
             params,
             is_query: false,
-        };*/
-        //AT_CH.send(channel::Msg::AtCmdOutput(at_command)).await;
+        };
+        AT_CH.send(channel::Msg::AtCmdOutput(at_command)).await;
     }
 }
