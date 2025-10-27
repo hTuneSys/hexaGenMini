@@ -44,6 +44,10 @@ impl AtDispatcher {
                         info!("Dispatching FREQ command");
                         h.handle(spawner, cmd)
                     }
+                    Handler::Operation(h) => {
+                        info!("Dispatching OPERATION command");
+                        h.handle(spawner, cmd)
+                    }
                 },
                 None => Some(Error::UnknownCommand),
             },

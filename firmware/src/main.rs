@@ -95,11 +95,6 @@ pub async fn main_loop_task(mut led: embassy_rp::gpio::Output<'static>) {
     //Dummy task to blink the LED
     loop {
         info!("Blink!");
-        /*let mut name = String::<16>::new();
-        name.push_str("STATUS").unwrap();
-
-        let mut params = Vec::<String<16>, 8>::new();
-        let mut status_param = String::<16>::try_from("AVAILABLE").unwrap();*/
 
         if hexa_config::is_dds_available() {
             led.set_high();
@@ -107,7 +102,6 @@ pub async fn main_loop_task(mut led: embassy_rp::gpio::Output<'static>) {
             led.set_low();
             embassy_time::Timer::after_secs(5).await;
         } else {
-            //status_param = String::<16>::try_from("GENERATING").unwrap();
             for _ in 0..50 {
                 led.set_high();
                 embassy_time::Timer::after_millis(100).await;
@@ -115,13 +109,5 @@ pub async fn main_loop_task(mut led: embassy_rp::gpio::Output<'static>) {
                 embassy_time::Timer::after_millis(100).await;
             }
         }
-        /*params.push(status_param).ok();
-        let at_command = at::AtCommand {
-            id: at::get_empty_id(),
-            name,
-            params,
-            is_query: false,
-        };*/
-        //AT_CH.send(channel::Msg::AtCmdOutput(at_command)).await;
     }
 }

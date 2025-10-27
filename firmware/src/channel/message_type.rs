@@ -14,9 +14,13 @@ pub enum Msg {
     AtRxLine(MsgString),
     AtCmdOutput(AtCommand),
     Done(MsgId),
+    Completed(AtCommand),
     Err(MsgId, Error),
     UsbTxLine(MsgString),
     RgbWithValue(AtCommand),
     FreqWithValue(AtCommand),
     SetDdsAvailable(IsDdsAvailable),
+    SetOperationStatus(MsgString),
+    GetOperationStatus,
+    Operation(AtCommand),
 }

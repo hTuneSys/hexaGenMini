@@ -3,15 +3,16 @@
 
 #[derive(Debug, Clone)]
 pub enum Error {
-    InvalidCommand,    // "Not an AT command"
-    DdsBusy,           // "DDS is busy"
-    InvalidUtf8,       // "Invalid UTF-8 in param"
-    InvalidSysEx,      // "Invalid SysEx"
-    InvalidDataLength, // "Invalid data length"
-    ParamCount,        // "Param count"
-    ParamValue,        // "Param value"
-    NotAQuery,         // "Not a query"
-    UnknownCommand,    // "Unknown command"
+    InvalidCommand,     // "Not an AT command"
+    DdsBusy,            // "DDS is busy"
+    InvalidUtf8,        // "Invalid UTF-8 in param"
+    InvalidSysEx,       // "Invalid SysEx"
+    InvalidDataLength,  // "Invalid data length"
+    ParamCount,         // "Param count"
+    ParamValue,         // "Param value"
+    NotAQuery,          // "Not a query"
+    UnknownCommand,     // "Unknown command"
+    OperationStepsFull, // "Operation steps full"
 }
 
 impl Error {
@@ -27,6 +28,7 @@ impl Error {
             Error::ParamValue => "E001007",
             Error::NotAQuery => "E001008",
             Error::UnknownCommand => "E001009",
+            Error::OperationStepsFull => "E001010",
         }
     }
 }

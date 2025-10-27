@@ -17,6 +17,7 @@ pub enum Handler {
     Reset(ResetHandler),
     FwUpdate(FwUpdateHandler),
     Freq(FreqHandler),
+    Operation(OperationHandler),
 }
 
 pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
@@ -49,6 +50,12 @@ pub fn register_all() -> LinearMap<String<16>, Handler, 8> {
     map.insert(
         String::<16>::try_from("FREQ").unwrap(),
         Handler::Freq(FreqHandler),
+    )
+    .ok();
+
+    map.insert(
+        String::<16>::try_from("OPERATION").unwrap(),
+        Handler::Operation(OperationHandler),
     )
     .ok();
 

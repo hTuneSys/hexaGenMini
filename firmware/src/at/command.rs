@@ -6,6 +6,7 @@ use heapless::{String, Vec};
 
 use crate::error::Error;
 
+#[derive(Debug, Clone)]
 pub struct AtCommand {
     pub id: String<16>,
     pub name: String<16>,
@@ -125,6 +126,18 @@ pub fn compile_at_done(id: String<16>) -> String<64> {
         params: Vec::<String<16>, 8>::new(),
         is_query: false,
     };
+    at_cmd.compile()
+}
+
+pub fn compile_at_completed(at_command: AtCommand) -> String<64> {
+    let mut at_cmd = AtCommand {
+        id: at_command.id,
+        name: at_command.name,
+        params: at_command.params,
+        is_query: false,
+    };
+    let completede_param = String::<16>::try_from("COMPLETED").unwrap();
+    at_cmd.params.push(completede_param).ok();
     at_cmd.compile()
 }
 

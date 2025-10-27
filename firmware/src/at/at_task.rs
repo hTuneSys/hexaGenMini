@@ -3,6 +3,7 @@
 
 use defmt::{error, info};
 use embassy_executor::Spawner;
+use heapless::String;
 use {defmt_rtt as _, panic_probe as _};
 
 use crate::AT_CH;
@@ -14,6 +15,7 @@ use crate::hexa_config::*;
 #[embassy_executor::task]
 pub async fn at_task(dispatcher: &'static AtDispatcher, spawner: Spawner) {
     info!("Starting AT task");
+    let mut last_operation_status: String<64> = String::new();
     loop {
         match AT_CH.receive().await {
             Msg::AtRxLine(line) => {
@@ -40,6 +42,19 @@ pub async fn at_task(dispatcher: &'static AtDispatcher, spawner: Spawner) {
             }
             Msg::SetDdsAvailable(status) => {
                 set_dds_available(status);
+            }
+            Msg::Completed(at_command) => {
+                let compiled = compile_at_completed(at_command);
+                info!("Sending done: {}", compiled.as_str());
+                USB_CH.send(Msg::UsbTxLine(compiled)).await;
+            }
+            Msg::SetOperationStatus(status) => {
+                last_operation_status = status;
+            }
+            Msg::GetOperationStatus => {
+                USB_CH
+                    .send(Msg::UsbTxLine(last_operation_status.clone()))
+                    .await;
             }
             _ => {}
         }
