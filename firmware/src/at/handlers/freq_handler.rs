@@ -3,26 +3,20 @@
 
 use defmt::{error, info};
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::Sender;
 
+use crate::DDS_CH;
 use crate::at::{AtCommand, AtHandler};
-use crate::channel::{CAP, Msg};
+use crate::channel::*;
 use crate::error::Error;
 use crate::hexa_config::*;
 
 pub struct FreqHandler;
 
 impl AtHandler for FreqHandler {
-    fn handle(
-        &self,
-        spawner: Spawner,
-        dds_tx: Sender<'static, Cs, Msg, CAP>,
-        at_command: AtCommand,
-    ) -> Option<Error> {
+    fn handle(&self, spawner: Spawner, at_command: AtCommand) -> Option<Error> {
         if is_dds_available() {
             info!("Setting FREQ: {:?}", at_command.id.as_str());
-            let _ = spawner.spawn(freq_task(dds_tx, at_command));
+            let _ = spawner.spawn(freq_task(at_command));
             None
         } else {
             error!("DDS busy, cannot set FREQ ({})", at_command.id.as_str());
@@ -32,6 +26,11 @@ impl AtHandler for FreqHandler {
 }
 
 #[embassy_executor::task]
-async fn freq_task(dds_tx: Sender<'static, Cs, Msg, CAP>, at_command: AtCommand) {
-    dds_tx.send(Msg::FreqWithValue(at_command)).await;
+async fn freq_task(at_command: AtCommand) {
+    info!(
+        "Sending FREQ command to DDS task: {}",
+        at_command.id.as_str()
+    );
+    DDS_CH.send(Msg::FreqWithValue(at_command)).await;
+    info!("FREQ command sent to DDS task");
 }

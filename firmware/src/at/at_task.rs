@@ -3,56 +3,58 @@
 
 use defmt::{error, info};
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::{Receiver, Sender};
+use heapless::String;
 use {defmt_rtt as _, panic_probe as _};
 
+use crate::AT_CH;
+use crate::USB_CH;
 use crate::at::*;
-use crate::channel::{CAP, Msg};
+use crate::channel::*;
 use crate::hexa_config::*;
 
 #[embassy_executor::task]
-pub async fn at_task(
-    dispatcher: &'static AtDispatcher,
-    spawner: Spawner,
-    at_rx: Receiver<'static, Cs, Msg, CAP>,
-    at_tx: Sender<'static, Cs, Msg, CAP>,
-    usb_tx: Sender<'static, Cs, Msg, CAP>,
-    rgb_tx: Sender<'static, Cs, Msg, CAP>,
-    dds_tx: Sender<'static, Cs, Msg, CAP>,
-) {
+pub async fn at_task(dispatcher: &'static AtDispatcher, spawner: Spawner) {
     info!("Starting AT task");
+    let mut last_operation_status: String<64> = String::new();
     loop {
-        match at_rx.receive().await {
+        match AT_CH.receive().await {
             Msg::AtRxLine(line) => {
-                if let Some(e) = dispatcher.dispatch(spawner, at_tx, rgb_tx, dds_tx, &line) {
+                if let Some(e) = dispatcher.dispatch(spawner, &line) {
                     let compiled = compile_at_error(get_empty_id(), e);
                     error!("Dispatch error: {:?}", compiled.as_str());
-                    usb_tx.send(Msg::UsbTxLine(compiled)).await;
+                    USB_CH.send(Msg::UsbTxLine(compiled)).await;
                 }
             }
             Msg::AtCmdOutput(at_command) => {
                 let compiled = at_command.compile();
                 info!("Sending output: {}", compiled.as_str());
-                usb_tx.send(Msg::UsbTxLine(compiled)).await;
+                USB_CH.send(Msg::UsbTxLine(compiled)).await;
             }
             Msg::Done(msg_id) => {
                 let compiled = compile_at_done(msg_id);
                 info!("Sending done: {}", compiled.as_str());
-                usb_tx.send(Msg::UsbTxLine(compiled)).await;
+                USB_CH.send(Msg::UsbTxLine(compiled)).await;
             }
             Msg::Err(msg_id, e) => {
                 let compiled = compile_at_error(msg_id, e);
                 error!("Sending error: {}", compiled.as_str());
-                usb_tx.send(Msg::UsbTxLine(compiled)).await;
-            }
-            Msg::ErrWOCommand(e) => {
-                let compiled = compile_at_error(get_empty_id(), e);
-                error!("Sending error: {}", compiled.as_str());
-                usb_tx.send(Msg::UsbTxLine(compiled)).await;
+                USB_CH.send(Msg::UsbTxLine(compiled)).await;
             }
             Msg::SetDdsAvailable(status) => {
                 set_dds_available(status);
+            }
+            Msg::Completed(at_command) => {
+                let compiled = compile_at_completed(at_command);
+                info!("Sending done: {}", compiled.as_str());
+                USB_CH.send(Msg::UsbTxLine(compiled)).await;
+            }
+            Msg::SetOperationStatus(status) => {
+                last_operation_status = status;
+            }
+            Msg::GetOperationStatus => {
+                USB_CH
+                    .send(Msg::UsbTxLine(last_operation_status.clone()))
+                    .await;
             }
             _ => {}
         }

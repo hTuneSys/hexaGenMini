@@ -2,30 +2,26 @@
 // SPDX-License-Identifier: MIT
 
 use defmt::*;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::{Receiver, Sender};
 use {defmt_rtt as _, panic_probe as _};
 
-use crate::channel::{CAP, Msg};
+use crate::AT_CH;
+use crate::RGB_CH;
+use crate::channel::*;
 use crate::error::Error;
 use crate::rgb::RgbLed;
 
 #[embassy_executor::task]
-pub async fn rgb_task(
-    mut rgb_led: RgbLed,
-    rgb_rx: Receiver<'static, Cs, Msg, CAP>,
-    at_tx: Sender<'static, Cs, Msg, CAP>,
-) {
+pub async fn rgb_task(mut rgb_led: RgbLed) {
     info!("Starting RGB task");
     loop {
-        if let Msg::RgbWithValue(at_command) = rgb_rx.receive().await {
+        if let Msg::RgbWithValue(at_command) = RGB_CH.receive().await {
             if at_command.params.len() != 3 {
                 error!(
                     "SETRGB command {} requires 3 parameters, got {}",
                     at_command.id.as_str(),
                     at_command.params.len()
                 );
-                at_tx.send(Msg::Err(at_command.id, Error::ParamCount)).await;
+                AT_CH.send(Msg::Err(at_command.id, Error::ParamCount)).await;
                 return;
             }
             // check params are u8
@@ -33,7 +29,7 @@ pub async fn rgb_task(
                 Ok(v) => v,
                 Err(_) => {
                     error!("Invalid R value: {}", at_command.id.as_str());
-                    at_tx.send(Msg::Err(at_command.id, Error::ParamValue)).await;
+                    AT_CH.send(Msg::Err(at_command.id, Error::ParamValue)).await;
                     return;
                 }
             };
@@ -41,7 +37,7 @@ pub async fn rgb_task(
                 Ok(v) => v,
                 Err(_) => {
                     error!("Invalid G value: {}", at_command.id.as_str());
-                    at_tx.send(Msg::Err(at_command.id, Error::ParamValue)).await;
+                    AT_CH.send(Msg::Err(at_command.id, Error::ParamValue)).await;
                     return;
                 }
             };
@@ -49,7 +45,7 @@ pub async fn rgb_task(
                 Ok(v) => v,
                 Err(_) => {
                     error!("Invalid B value: {}", at_command.id.as_str());
-                    at_tx.send(Msg::Err(at_command.id, Error::ParamValue)).await;
+                    AT_CH.send(Msg::Err(at_command.id, Error::ParamValue)).await;
                     return;
                 }
             };
@@ -57,7 +53,7 @@ pub async fn rgb_task(
             rgb_led.set_rgb(r, g, b).await;
             info!("RGB set");
             info!("Sending DONE from RGB task");
-            at_tx.send(Msg::Done(at_command.id)).await;
+            AT_CH.send(Msg::Done(at_command.id)).await;
         }
     }
 }

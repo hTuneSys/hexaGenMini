@@ -3,26 +3,20 @@
 
 use defmt::error;
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::Sender;
 use heapless::{String, Vec};
 
+use crate::AT_CH;
 use crate::at::*;
-use crate::channel::{CAP, Msg};
+use crate::channel::*;
 use crate::error::Error;
 use crate::hexa_config::CONF_VERSION;
 
 pub struct VersionHandler;
 
 impl AtHandler for VersionHandler {
-    fn handle(
-        &self,
-        spawner: Spawner,
-        at_tx: Sender<'static, Cs, Msg, CAP>,
-        at_command: AtCommand,
-    ) -> Option<Error> {
+    fn handle(&self, spawner: Spawner, at_command: AtCommand) -> Option<Error> {
         if at_command.is_query {
-            let _ = spawner.spawn(version_task(at_tx));
+            let _ = spawner.spawn(version_task());
             None
         } else {
             error!("VERSION command is a query only");
@@ -32,7 +26,7 @@ impl AtHandler for VersionHandler {
 }
 
 #[embassy_executor::task]
-async fn version_task(at_tx: Sender<'static, Cs, Msg, CAP>) {
+async fn version_task() {
     let mut name = String::<16>::new();
     name.push_str("VERSION").unwrap();
 
@@ -46,5 +40,5 @@ async fn version_task(at_tx: Sender<'static, Cs, Msg, CAP>) {
         params,
         is_query: false,
     };
-    at_tx.send(Msg::AtCmdOutput(at_command)).await;
+    AT_CH.send(Msg::AtCmdOutput(at_command)).await;
 }

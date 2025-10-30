@@ -5,3 +5,5 @@ mod dds_task;
 pub use dds_task::*;
 mod ad985x;
 pub use ad985x::*;
+mod dds_type;
+pub use dds_type::*;

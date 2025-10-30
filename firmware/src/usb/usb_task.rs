@@ -4,10 +4,12 @@
 use defmt::{error, info};
 use embassy_futures::select::{Either, select};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
-use embassy_sync::channel::{Receiver, Sender};
 use embassy_sync::mutex::Mutex;
 
-use crate::channel::{CAP, Msg};
+use crate::AT_CH;
+use crate::USB_CH;
+use crate::at::get_empty_id;
+use crate::channel::*;
 use crate::error::Error;
 use crate::sysex::{build_sysex, extract_sysex_payload, sysex_to_usb_midi_packets};
 use crate::usb::{MyMidiClass, MyUsbDevice};
@@ -19,11 +21,7 @@ pub async fn dev_task(mut dev: MyUsbDevice<'static>) {
 }
 
 #[embassy_executor::task]
-pub async fn usb_io_task(
-    midi: &'static Mutex<Cs, MyMidiClass<'static>>,
-    usb_rx: Receiver<'static, Cs, Msg, CAP>,
-    at_tx: Sender<'static, Cs, Msg, CAP>,
-) {
+pub async fn usb_io_task(midi: &'static Mutex<Cs, MyMidiClass<'static>>) {
     info!("Starting unified USB IO task");
     loop {
         let read_fut = async {
@@ -35,7 +33,7 @@ pub async fn usb_io_task(
             (n, buf)
         };
 
-        let tx_fut = async { usb_rx.receive().await };
+        let tx_fut = async { USB_CH.receive().await };
 
         match select(read_fut, tx_fut).await {
             Either::First((n, buf)) => {
@@ -49,22 +47,26 @@ pub async fn usb_io_task(
                     if let Ok(input) = core::str::from_utf8(&payload) {
                         match heapless::String::<64>::try_from(input) {
                             Ok(line) => {
-                                at_tx.send(Msg::AtRxLine(line)).await;
+                                AT_CH.send(Msg::AtRxLine(line)).await;
                             }
                             Err(_) => {
                                 error!("Error Code: {}", Error::InvalidDataLength.code());
-                                at_tx
-                                    .send(Msg::ErrWOCommand(Error::InvalidDataLength))
+                                AT_CH
+                                    .send(Msg::Err(get_empty_id(), Error::InvalidDataLength))
                                     .await;
                             }
                         }
                     } else {
                         error!("Error Code: {}", Error::InvalidUtf8.code());
-                        at_tx.send(Msg::ErrWOCommand(Error::InvalidUtf8)).await;
+                        AT_CH
+                            .send(Msg::Err(get_empty_id(), Error::InvalidUtf8))
+                            .await;
                     }
                 } else {
                     error!("Error Code: {}", Error::InvalidSysEx.code());
-                    at_tx.send(Msg::ErrWOCommand(Error::InvalidSysEx)).await;
+                    /*AT_CH
+                    .send(Msg::Err(get_empty_id(), Error::InvalidSysEx))
+                    .await;*/
                 }
             }
 
@@ -76,7 +78,7 @@ pub async fn usb_io_task(
 
                         let mut m = midi.lock().await;
                         for pkt in packets.iter() {
-                            info!("Sending MIDI packet: {:?}", pkt);
+                            //info!("Sending MIDI packet: {:?}", pkt);
                             if let Err(e) = m.write_packet(pkt).await {
                                 error!("USB write error: {:?}", e);
                             }
