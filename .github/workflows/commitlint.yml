@@ -15,7 +15,11 @@ permissions:
 
 jobs:
   commitlint:
+<<<<<<< Updated upstream
     name: Commit Lint (hexaGenMini)
+=======
+    name: Commit Lint (hexaTuneWeb)
+>>>>>>> Stashed changes
     runs-on: ubuntu-latest
     steps:
       - name: Checkout (full history)
