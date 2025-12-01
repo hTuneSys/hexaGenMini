@@ -354,7 +354,7 @@ dependencies = [
  "cortex-m",
  "cortex-m-rt",
  "embassy-boot",
- "embassy-rp",
+ "embassy-rp 0.8.0",
  "embassy-sync",
  "embassy-time",
  "embedded-storage",
@@ -453,6 +453,42 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a284935af0a869de3fa14af74b5f932389dd66d7048012f1083b06f38d05399"
 dependencies = [
  "atomic-polyfill",
+ "cfg-if",
+ "cortex-m",
+ "cortex-m-rt",
+ "critical-section",
+ "document-features",
+ "embassy-embedded-hal",
+ "embassy-futures",
+ "embassy-hal-internal",
+ "embassy-sync",
+ "embassy-time",
+ "embassy-usb-driver",
+ "embedded-hal 0.2.7",
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+ "embedded-hal-nb",
+ "embedded-io",
+ "embedded-io-async",
+ "embedded-storage",
+ "embedded-storage-async",
+ "fixed",
+ "nb 1.1.0",
+ "pio",
+ "rand_core 0.6.4",
+ "rand_core 0.9.3",
+ "rp-pac",
+ "rp2040-boot2",
+ "sha2-const-stable",
+ "smart-leds",
+]
+
+[[package]]
+name = "embassy-rp"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af8d5ac11a8bc209d359ad98bb10a10f786471dd474790f3a4f991c77ae94f6f"
+dependencies = [
  "cfg-if",
  "cortex-m",
  "cortex-m-rt",
@@ -764,7 +800,7 @@ dependencies = [
  "embassy-embedded-hal",
  "embassy-executor",
  "embassy-futures",
- "embassy-rp",
+ "embassy-rp 0.9.0",
  "embassy-sync",
  "embassy-time",
  "embassy-usb",
