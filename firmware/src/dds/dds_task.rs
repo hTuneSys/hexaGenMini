@@ -6,13 +6,14 @@ use defmt::*;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::mutex::Mutex;
 
-use heapless::{String, Vec};
 use {defmt_rtt as _, panic_probe as _};
 
-use crate::at::*;
+use hexa_tune_proto_embedded::command::OperationSub;
+
+use crate::at::{encode_error_response, encode_response, u32_to_ascii_buf};
 use crate::channel::*;
 use crate::dds::*;
-use crate::error::Error;
+use crate::error::FirmwareError;
 use crate::{AT_CH, DDS_CH};
 
 static OPERATION: Mutex<Cs, RefCell<Operation>> = Mutex::new(RefCell::new(Operation::new()));
@@ -22,136 +23,86 @@ pub async fn dds_task(mut ad985x: Ad985x) {
     info!("Starting DDS task");
     loop {
         match DDS_CH.receive().await {
-            Msg::Operation(at_command) => {
-                info!(
-                    "Received OPERATION command in DDS task: {}",
-                    at_command.id.as_str()
-                );
-                info!("Parsing OPERATION command parameters");
-                if at_command.params.len() != 1 {
-                    error!(
-                        "OPERATION command requires 1 parameters, got {}",
-                        at_command.params.len()
-                    );
-                    AT_CH.send(Msg::Err(at_command.id, Error::ParamCount)).await;
-                    continue;
-                }
-                info!("Parameters parsed successfully");
-                info!("Extracting command_type values");
-                let command_type = match at_command.params[0].parse::<String<16>>() {
-                    Ok(v) => v,
-                    Err(_) => {
-                        error!("Invalid command_type value: {}", at_command.id.as_str());
-                        AT_CH.send(Msg::Err(at_command.id, Error::ParamValue)).await;
-                        continue;
-                    }
-                };
+            Msg::OperationCmd { id, sub } => {
+                info!("Received OPERATION command in DDS task: {}", id);
 
-                match command_type.as_str() {
-                    "PREPARE" => {
+                match sub {
+                    OperationSub::Prepare => {
                         info!("Preparing DDS operation");
 
-                        // Reset the operation by replacing the inner value
                         let operation = OPERATION.lock().await;
                         *operation.borrow_mut() = Operation::new();
-
                         {
                             let mut guard = operation.borrow_mut();
-                            guard.set_id(at_command.id.clone());
+                            guard.set_id(id);
                         }
                         drop(operation);
 
                         info!("DDS operation prepared");
-                        AT_CH.send(Msg::Completed(at_command.clone())).await;
+                        let completed =
+                            encode_response(b"OPERATION", id, &[b"PREPARE", b"COMPLETED"]);
+                        AT_CH.send(Msg::AtCmdResponse(completed.clone())).await;
                         info!("Completed sent for PREPARE command");
 
-                        let compiled_status = compile_at_completed(at_command.clone());
-                        AT_CH.send(Msg::SetOperationStatus(compiled_status)).await;
+                        AT_CH.send(Msg::SetOperationStatus(completed)).await;
                     }
-                    "GENERATE" => {
+                    OperationSub::Generate => {
                         info!("Starting DDS operation");
 
-                        let mut result: Option<Error> = None;
+                        let mut result: Option<FirmwareError> = None;
 
                         info!("Setting Device Available to false");
                         AT_CH.send(Msg::SetDdsAvailable(false)).await;
                         info!("Set Device Available to false");
 
-                        let compiled_status = compile_at_completed(at_command.clone());
-                        AT_CH.send(Msg::SetOperationStatus(compiled_status)).await;
+                        let gen_completed =
+                            encode_response(b"OPERATION", id, &[b"GENERATE", b"COMPLETED"]);
+                        AT_CH
+                            .send(Msg::SetOperationStatus(gen_completed.clone()))
+                            .await;
 
-                        let steps = {
+                        // Clone steps out of the mutex
+                        let step_count;
+                        let mut step_ids = [0u32; 64];
+                        let mut step_freqs = [0u32; 64];
+                        let mut step_times = [0u32; 64];
+                        {
                             let operation = OPERATION.lock().await;
                             let guard = operation.borrow();
-                            guard.get_steps().clone()
-                        };
-
-                        let mut at_command_status = at_command.clone();
-                        at_command_status.params.clear();
-
-                        for at_command_step in steps.iter() {
-                            let mut params = Vec::<String<16>, 8>::new();
-                            let generating_param = String::<16>::try_from("GENERATING").unwrap();
-                            params.push(generating_param).ok();
-
-                            at_command_status.params = params;
-
-                            info!("Parsing FREQ command parameters");
-                            if at_command_step.params.len() != 2 {
-                                error!(
-                                    "FREQ command requires 2 parameters, got {}",
-                                    at_command_step.params.len()
-                                );
-                                result = Some(Error::ParamCount);
-                                break;
+                            let steps = guard.get_steps();
+                            step_count = steps.len();
+                            for (i, s) in steps.iter().enumerate() {
+                                step_ids[i] = s.id;
+                                step_freqs[i] = s.freq;
+                                step_times[i] = s.time_ms;
                             }
-                            info!("Parameters parsed successfully");
+                        }
 
-                            info!("Extracting frequency and time_ms values");
-                            let freq = match at_command_step.params[0].parse::<u32>() {
-                                Ok(v) => v,
-                                Err(_) => {
-                                    error!(
-                                        "Invalid frequency value: {}",
-                                        at_command_step.id.as_str()
-                                    );
-                                    result = Some(Error::ParamValue);
-                                    break;
-                                }
-                            };
-                            info!("Frequency value extracted: {}", freq);
-                            let time_ms = match at_command_step.params[1].parse::<u32>() {
-                                Ok(v) => v,
-                                Err(_) => {
-                                    error!(
-                                        "Invalid time_ms value: {}",
-                                        at_command_step.id.as_str()
-                                    );
-                                    result = Some(Error::ParamValue);
-                                    break;
-                                }
-                            };
-                            info!("time_ms value extracted: {}", time_ms);
+                        for i in 0..step_count {
+                            let step_id = step_ids[i];
+                            let freq = step_freqs[i];
+                            let time_ms = step_times[i];
 
-                            info!(
-                                "Setting FREQ to ({}) over {} ms",
-                                at_command_step.id.as_str(),
-                                time_ms
+                            // Build status: AT+OPERATION=id#GENERATING#step_id#COMPLETED
+                            let mut sid_buf = [0u8; 10];
+                            let sid_len = u32_to_ascii_buf(step_id, &mut sid_buf);
+                            let status = encode_response(
+                                b"OPERATION",
+                                id,
+                                &[b"GENERATING", &sid_buf[..sid_len], b"COMPLETED"],
                             );
+                            AT_CH.send(Msg::SetOperationStatus(status)).await;
 
-                            let step_id_param =
-                                String::<16>::try_from(at_command_step.id.as_str()).unwrap();
-                            at_command_status.params.push(step_id_param).ok();
-                            let compiled_status = compile_at_completed(at_command_status.clone());
-                            AT_CH.send(Msg::SetOperationStatus(compiled_status)).await;
-
-                            info!("Starting frequency set...");
+                            info!("Setting FREQ to {} over {} ms", freq, time_ms);
                             let err = ad985x.set_freq(freq, time_ms).await;
                             info!("Frequency set complete.");
 
                             if let Some(err) = err {
-                                error!("Error setting FREQ: {:?}", err.code());
-                                result = Some(err);
+                                error!("Error setting FREQ");
+                                result = Some(FirmwareError::Hexa(
+                                    hexa_tune_proto_embedded::HexaError::InvalidParam,
+                                ));
+                                let _ = err;
                                 break;
                             } else {
                                 info!("FREQ set successfully");
@@ -163,46 +114,47 @@ pub async fn dds_task(mut ad985x: Ad985x) {
                         info!("Set Device Available to true");
 
                         if let Some(err) = result {
-                            error!("DDS operation failed: {:?}", err.code());
-                            AT_CH
-                                .send(Msg::Err(at_command.id.clone(), err.clone()))
-                                .await;
+                            error!("DDS operation failed");
+                            AT_CH.send(Msg::Err(id, err)).await;
 
-                            let compiled_status = compile_at_error(at_command.id.clone(), err);
-                            AT_CH.send(Msg::SetOperationStatus(compiled_status)).await;
+                            let error_status = encode_error_response(id, &err);
+                            AT_CH.send(Msg::SetOperationStatus(error_status)).await;
                         } else {
-                            let compiled_status = compile_at_completed(at_command.clone());
-                            AT_CH.send(Msg::SetOperationStatus(compiled_status)).await;
+                            AT_CH.send(Msg::SetOperationStatus(gen_completed)).await;
                         }
-                    }
-                    _ => {
-                        error!("Unknown command_type value: {}", at_command.id.as_str());
-                        AT_CH.send(Msg::Err(at_command.id, Error::ParamValue)).await;
-                        continue;
                     }
                 }
             }
-            Msg::FreqWithValue(at_command) => {
-                info!(
-                    "Received FREQ command in DDS task: {}",
-                    at_command.id.as_str()
-                );
+            Msg::FreqSet { id, freq, time_ms } => {
+                info!("Received FREQ command in DDS task: {}", id);
 
-                info!("Adding FREQ command to operation");
+                info!("Adding FREQ step to operation");
                 let operation = OPERATION.lock().await;
 
+                let step = FreqStep { id, freq, time_ms };
                 let add_result = {
                     let mut guard = operation.borrow_mut();
-                    guard.add_step(at_command.clone())
+                    guard.add_step(step)
                 };
                 drop(operation);
 
                 if let Err(e) = add_result {
                     error!("Failed to add step: operation is full");
-                    AT_CH.send(Msg::Err(at_command.id, e)).await;
+                    AT_CH.send(Msg::Err(id, e)).await;
                 } else {
-                    info!("FREQ command added to operation");
-                    AT_CH.send(Msg::Completed(at_command)).await;
+                    info!("FREQ step added to operation");
+
+                    // Build completed response: AT+FREQ=id#freq#time_ms#COMPLETED
+                    let mut freq_buf = [0u8; 10];
+                    let freq_len = u32_to_ascii_buf(freq, &mut freq_buf);
+                    let mut time_buf = [0u8; 10];
+                    let time_len = u32_to_ascii_buf(time_ms, &mut time_buf);
+                    let completed = encode_response(
+                        b"FREQ",
+                        id,
+                        &[&freq_buf[..freq_len], &time_buf[..time_len], b"COMPLETED"],
+                    );
+                    AT_CH.send(Msg::AtCmdResponse(completed)).await;
                     info!("Completed sent for FREQ command");
                 }
             }

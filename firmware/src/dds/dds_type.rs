@@ -1,40 +1,45 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-use heapless::{String, Vec};
+use heapless::Vec;
 
-use crate::at::AtCommand;
-use crate::error::Error;
+use crate::error::FirmwareError;
 
-pub type OperationId = String<16>;
+pub struct FreqStep {
+    pub id: u32,
+    pub freq: u32,
+    pub time_ms: u32,
+}
 
 pub struct Operation {
-    id: OperationId,
-    steps: Vec<AtCommand, 64>,
+    id: u32,
+    steps: Vec<FreqStep, 64>,
 }
 
 impl Operation {
     pub const fn new() -> Self {
         Self {
-            id: String::new(),
+            id: 0,
             steps: Vec::new(),
         }
     }
 
     #[allow(dead_code)]
-    pub fn get_id(&self) -> &OperationId {
-        &self.id
+    pub fn get_id(&self) -> u32 {
+        self.id
     }
 
-    pub fn set_id(&mut self, id: OperationId) {
+    pub fn set_id(&mut self, id: u32) {
         self.id = id;
     }
 
-    pub fn get_steps(&self) -> &heapless::Vec<AtCommand, 64> {
+    pub fn get_steps(&self) -> &Vec<FreqStep, 64> {
         &self.steps
     }
 
-    pub fn add_step(&mut self, step: AtCommand) -> Result<(), Error> {
-        self.steps.push(step).map_err(|_| Error::OperationStepsFull)
+    pub fn add_step(&mut self, step: FreqStep) -> Result<(), FirmwareError> {
+        self.steps
+            .push(step)
+            .map_err(|_| FirmwareError::OperationStepsFull)
     }
 }

@@ -3,24 +3,22 @@
 
 use heapless::String;
 
-use crate::at::AtCommand;
-use crate::error::Error;
+use crate::error::FirmwareError;
+use hexa_tune_proto_embedded::command::OperationSub;
 
-pub type MsgId = String<16>;
+pub type MsgId = u32;
 pub type MsgString = String<64>;
-pub type IsDdsAvailable = bool;
 
 pub enum Msg {
     AtRxLine(MsgString),
-    AtCmdOutput(AtCommand),
+    AtCmdResponse(MsgString),
     Done(MsgId),
-    Completed(AtCommand),
-    Err(MsgId, Error),
+    Err(MsgId, FirmwareError),
     UsbTxLine(MsgString),
-    RgbWithValue(AtCommand),
-    FreqWithValue(AtCommand),
-    SetDdsAvailable(IsDdsAvailable),
+    RgbSet { id: u32, r: u8, g: u8, b: u8 },
+    FreqSet { id: u32, freq: u32, time_ms: u32 },
+    SetDdsAvailable(bool),
     SetOperationStatus(MsgString),
     GetOperationStatus,
-    Operation(AtCommand),
+    OperationCmd { id: u32, sub: OperationSub },
 }
