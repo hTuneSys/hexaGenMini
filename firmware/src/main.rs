@@ -61,7 +61,7 @@ async fn main(spawner: embassy_executor::Spawner) {
         &mut common,
         sm0,
         p.DMA_CH0,
-        p.PIN_23,
+        p.PIN_6,
         &program,
     );
     let rgb_led = rgb::RgbLed::new(ws2812);
@@ -76,7 +76,6 @@ async fn main(spawner: embassy_executor::Spawner) {
         0,
     );
 
-    //Dummy Led
     let led = embassy_rp::gpio::Output::new(p.PIN_25, embassy_rp::gpio::Level::Low);
 
     spawner.spawn(at::at_task(spawner)).unwrap();
