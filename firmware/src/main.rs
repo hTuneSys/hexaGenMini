@@ -16,7 +16,6 @@ mod dds;
 mod error;
 mod hexa_config;
 mod rgb;
-mod sysex;
 mod usb;
 
 use crate::channel::*;
@@ -51,8 +50,6 @@ async fn main(spawner: embassy_executor::Spawner) {
 
     //AT module
     info!("Initializing AT command dispatcher");
-    static DISPATCHER: static_cell::StaticCell<at::AtDispatcher> = static_cell::StaticCell::new();
-    let dispatcher = DISPATCHER.init(at::AtDispatcher::new());
 
     //Led module
     info!("Initializing RGB LED");
@@ -82,7 +79,7 @@ async fn main(spawner: embassy_executor::Spawner) {
     //Dummy Led
     let led = embassy_rp::gpio::Output::new(p.PIN_25, embassy_rp::gpio::Level::Low);
 
-    spawner.spawn(at::at_task(dispatcher, spawner)).unwrap();
+    spawner.spawn(at::at_task(spawner)).unwrap();
     spawner.spawn(rgb::rgb_task(rgb_led)).unwrap();
     spawner.spawn(usb::dev_task(device)).unwrap();
     spawner.spawn(usb::usb_io_task(midi_mutex)).unwrap();

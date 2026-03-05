@@ -6,12 +6,13 @@ use embassy_futures::select::{Either, select};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex as Cs;
 use embassy_sync::mutex::Mutex;
 
+use hexa_tune_proto::sysex;
+use hexa_tune_proto::usb_midi;
+
 use crate::AT_CH;
 use crate::USB_CH;
-use crate::at::get_empty_id;
 use crate::channel::*;
-use crate::error::Error;
-use crate::sysex::{build_sysex, extract_sysex_payload, sysex_to_usb_midi_packets};
+use crate::error::FirmwareError;
 use crate::usb::{MyMidiClass, MyUsbDevice};
 
 #[embassy_executor::task]
@@ -43,48 +44,108 @@ pub async fn usb_io_task(midi: &'static Mutex<Cs, MyMidiClass<'static>>) {
                 let data = &buf[..n];
                 info!("Received MIDI packet: {:?}", data);
 
-                if let Some(payload) = extract_sysex_payload(data) {
-                    if let Ok(input) = core::str::from_utf8(&payload) {
-                        match heapless::String::<64>::try_from(input) {
-                            Ok(line) => {
-                                AT_CH.send(Msg::AtRxLine(line)).await;
-                            }
-                            Err(_) => {
-                                error!("Error Code: {}", Error::InvalidDataLength.code());
-                                AT_CH
-                                    .send(Msg::Err(get_empty_id(), Error::InvalidDataLength))
-                                    .await;
-                            }
-                        }
-                    } else {
-                        error!("Error Code: {}", Error::InvalidUtf8.code());
+                let num_packets = n / 4;
+                if num_packets == 0 {
+                    continue;
+                }
+
+                // Collect 4-byte packets from raw data
+                let mut packets = [[0u8; 4]; 16];
+                for i in 0..num_packets.min(16) {
+                    packets[i] = [
+                        data[i * 4],
+                        data[i * 4 + 1],
+                        data[i * 4 + 2],
+                        data[i * 4 + 3],
+                    ];
+                }
+
+                // Depacketize USB MIDI → SysEx
+                let mut sysex_buf = [0u8; 128];
+                let sysex_len = match usb_midi::depacketize(
+                    &packets[..num_packets.min(16)],
+                    &mut sysex_buf,
+                ) {
+                    Ok(len) => len,
+                    Err(e) => {
+                        error!("USB MIDI depacketize error");
                         AT_CH
-                            .send(Msg::Err(get_empty_id(), Error::InvalidUtf8))
+                            .send(Msg::Err(0, FirmwareError::Proto(e)))
+                            .await;
+                        continue;
+                    }
+                };
+
+                // Unframe SysEx → payload
+                let payload = match sysex::unframe(&sysex_buf[..sysex_len]) {
+                    Ok(p) => p,
+                    Err(e) => {
+                        error!("SysEx unframe error");
+                        AT_CH
+                            .send(Msg::Err(0, FirmwareError::Proto(e)))
+                            .await;
+                        continue;
+                    }
+                };
+
+                // Convert to UTF-8 string and send to AT channel
+                match core::str::from_utf8(payload) {
+                    Ok(input) => match MsgString::try_from(input) {
+                        Ok(line) => {
+                            AT_CH.send(Msg::AtRxLine(line)).await;
+                        }
+                        Err(_) => {
+                            error!("AT payload too long for buffer");
+                            AT_CH
+                                .send(Msg::Err(
+                                    0,
+                                    FirmwareError::Proto(
+                                        hexa_tune_proto::ProtoError::BufferTooSmall,
+                                    ),
+                                ))
+                                .await;
+                        }
+                    },
+                    Err(_) => {
+                        error!("Invalid UTF-8 in payload");
+                        AT_CH
+                            .send(Msg::Err(
+                                0,
+                                FirmwareError::Proto(hexa_tune_proto::ProtoError::InvalidUtf8),
+                            ))
                             .await;
                     }
-                } else {
-                    error!("Error Code: {}", Error::InvalidSysEx.code());
-                    /*AT_CH
-                    .send(Msg::Err(get_empty_id(), Error::InvalidSysEx))
-                    .await;*/
                 }
             }
 
             Either::Second(msg) => match msg {
                 Msg::UsbTxLine(line) => {
-                    if let Some(sysex) = build_sysex::<64>(&line) {
-                        let packets = sysex_to_usb_midi_packets::<64>(&sysex);
-                        info!("Sending {} MIDI packets", packets.len());
-
-                        let mut m = midi.lock().await;
-                        for pkt in packets.iter() {
-                            //info!("Sending MIDI packet: {:?}", pkt);
-                            if let Err(e) = m.write_packet(pkt).await {
-                                error!("USB write error: {:?}", e);
+                    let line_bytes = line.as_bytes();
+                    let mut sysex_buf = [0u8; 128];
+                    match sysex::frame(line_bytes, &mut sysex_buf) {
+                        Ok(sysex_len) => {
+                            let mut packets = [[0u8; 4]; 32];
+                            match usb_midi::packetize(
+                                &sysex_buf[..sysex_len],
+                                &mut packets,
+                            ) {
+                                Ok(np) => {
+                                    info!("Sending {} MIDI packets", np);
+                                    let mut m = midi.lock().await;
+                                    for pkt in packets[..np].iter() {
+                                        if let Err(e) = m.write_packet(pkt).await {
+                                            error!("USB write error: {:?}", e);
+                                        }
+                                    }
+                                }
+                                Err(_) => {
+                                    error!("USB MIDI packetize error");
+                                }
                             }
                         }
-                    } else {
-                        error!("UsbTxLine too long to fit into SysEx");
+                        Err(_) => {
+                            error!("UsbTxLine too long to fit into SysEx");
+                        }
                     }
                 }
                 _ => {

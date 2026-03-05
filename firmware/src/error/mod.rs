@@ -1,34 +1,48 @@
 // SPDX-FileCopyrightText: 2025 hexaTune LLC
 // SPDX-License-Identifier: MIT
 
-#[derive(Debug, Clone)]
-pub enum Error {
-    InvalidCommand,     // "Not an AT command"
-    DdsBusy,            // "DDS is busy"
-    InvalidUtf8,        // "Invalid UTF-8 in param"
-    InvalidSysEx,       // "Invalid SysEx"
-    InvalidDataLength,  // "Invalid data length"
-    ParamCount,         // "Param count"
-    ParamValue,         // "Param value"
-    NotAQuery,          // "Not a query"
-    UnknownCommand,     // "Unknown command"
-    OperationStepsFull, // "Operation steps full"
+pub use hexa_tune_proto::ProtoError;
+pub use hexa_tune_proto_embedded::HexaError;
+
+#[derive(Debug, Clone, Copy)]
+pub enum FirmwareError {
+    Proto(ProtoError),
+    Hexa(HexaError),
+    OperationStepsFull,
 }
 
-impl Error {
-    pub fn code(&self) -> &'static str {
+impl From<ProtoError> for FirmwareError {
+    fn from(e: ProtoError) -> Self {
+        Self::Proto(e)
+    }
+}
+
+impl From<HexaError> for FirmwareError {
+    fn from(e: HexaError) -> Self {
+        Self::Hexa(e)
+    }
+}
+
+impl FirmwareError {
+    /// Returns a numeric error code (u8) for wire-format encoding.
+    pub fn error_code(&self) -> u8 {
         match self {
-            // Command errors
-            Error::InvalidCommand => "E001001",
-            Error::DdsBusy => "E001002",
-            Error::InvalidUtf8 => "E001003",
-            Error::InvalidSysEx => "E001004",
-            Error::InvalidDataLength => "E001005",
-            Error::ParamCount => "E001006",
-            Error::ParamValue => "E001007",
-            Error::NotAQuery => "E001008",
-            Error::UnknownCommand => "E001009",
-            Error::OperationStepsFull => "E001010",
+            FirmwareError::Proto(e) => e.code(),
+            FirmwareError::Hexa(e) => match e {
+                HexaError::Proto(pe) => pe.code(),
+                HexaError::UnknownCommand => 11,
+                HexaError::DdsBusy => 12,
+                HexaError::NotAQuery => 13,
+                HexaError::MissingParam => 14,
+                HexaError::InvalidParam => 15,
+            },
+            FirmwareError::OperationStepsFull => 20,
         }
+    }
+}
+
+impl defmt::Format for FirmwareError {
+    fn format(&self, f: defmt::Formatter) {
+        defmt::write!(f, "FirmwareError({})", self.error_code());
     }
 }

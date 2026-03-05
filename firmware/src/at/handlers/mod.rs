@@ -7,8 +7,6 @@ mod setrgb_handler;
 pub use setrgb_handler::*;
 mod fwupdate_handler;
 pub use fwupdate_handler::*;
-mod reset_handler;
-pub use reset_handler::*;
 mod freq_handler;
 pub use freq_handler::*;
 mod operation_handler;

@@ -5,7 +5,7 @@ use defmt::*;
 use embassy_rp::gpio::Output;
 use embassy_time::{Duration, Timer};
 
-use crate::error::Error;
+use crate::error::FirmwareError;
 
 const CTRL_PWRDOWN: u8 = 1 << 7;
 const CTRL_SLEEP: u8 = 1 << 6;
@@ -76,7 +76,7 @@ impl Ad985x {
         ((num + den / 2) / den) as u32
     }
 
-    pub async fn reset(&mut self) -> Option<Error> {
+    pub async fn reset(&mut self) -> Option<FirmwareError> {
         self.rst.set_high();
         Timer::after(Duration::from_micros(5)).await;
         self.rst.set_low();
@@ -93,23 +93,23 @@ impl Ad985x {
         None
     }
 
-    /*pub async fn sleep(&mut self) -> Option<Error> {
+    /*pub async fn sleep(&mut self) -> Option<FirmwareError> {
         self.write_ftw_ctrl(0, self.ctrl_base | CTRL_SLEEP).await;
         None
     }*/
 
-    pub async fn down(&mut self) -> Option<Error> {
+    pub async fn down(&mut self) -> Option<FirmwareError> {
         self.write_ftw_ctrl(0, self.ctrl_base | CTRL_PWRDOWN).await;
         None
     }
 
-    pub async fn up(&mut self) -> Option<Error> {
+    pub async fn up(&mut self) -> Option<FirmwareError> {
         self.write_ftw_ctrl(0, self.ctrl_base & !(CTRL_SLEEP | CTRL_PWRDOWN))
             .await;
         None
     }
 
-    pub async fn set_freq(&mut self, freq_hz: u32, dwell_ms: u32) -> Option<Error> {
+    pub async fn set_freq(&mut self, freq_hz: u32, dwell_ms: u32) -> Option<FirmwareError> {
         if let Some(e) = self.down().await {
             return Some(e);
         }
@@ -135,7 +135,7 @@ impl Ad985x {
         None
     }
 
-    async fn set_freq_immediate(&mut self, freq_hz: u32) -> Option<Error> {
+    async fn set_freq_immediate(&mut self, freq_hz: u32) -> Option<FirmwareError> {
         let ftw = self.hz_to_ftw(freq_hz);
         self.write_ftw_ctrl(ftw, self.ctrl_base | CTRL_PHASE0).await;
         None
