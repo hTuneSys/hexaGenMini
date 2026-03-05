@@ -61,8 +61,10 @@ heapless = "0.9.1"
 static_cell = "2.1"
 portable-atomic = { version = "1.5", features = ["critical-section"] }
 
-hexa-tune-proto = { path = "../../hexaTuneProto/crates/hexa-tune-proto", default-features = false }
-hexa-tune-proto-embedded = { path = "../../hexaTuneProto/crates/hexa-tune-proto-embedded", default-features = false, features = ["defmt"] }
+hexa-tune-proto-embedded = { version = "0.1.1", default-features = false, features = [
+  "defmt",
+] }
+hexa-tune-proto = "0.1.1"
 
 [profile.release]
 # Enable generation of debug symbols even on release builds
