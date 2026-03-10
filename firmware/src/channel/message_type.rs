@@ -9,6 +9,13 @@ use hexa_tune_proto_embedded::command::OperationSub;
 pub type MsgId = u32;
 pub type MsgString = String<64>;
 
+#[derive(Clone, Copy, PartialEq)]
+pub enum RgbState {
+    Idle,
+    Prepare,
+    Generating,
+}
+
 pub enum Msg {
     AtRxLine(MsgString),
     AtCmdResponse(MsgString),
@@ -16,6 +23,7 @@ pub enum Msg {
     Err(MsgId, FirmwareError),
     UsbTxLine(MsgString),
     RgbSet { id: u32, r: u8, g: u8, b: u8 },
+    RgbMode(RgbState),
     FreqSet { id: u32, freq: u32, time_ms: u32 },
     SetDdsAvailable(bool),
     SetOperationStatus(MsgString),

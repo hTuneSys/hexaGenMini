@@ -14,7 +14,7 @@ use crate::at::{encode_error_response, encode_response, u32_to_ascii_buf};
 use crate::channel::*;
 use crate::dds::*;
 use crate::error::FirmwareError;
-use crate::{AT_CH, DDS_CH};
+use crate::{AT_CH, DDS_CH, RGB_CH};
 
 static OPERATION: Mutex<Cs, RefCell<Operation>> = Mutex::new(RefCell::new(Operation::new()));
 
@@ -45,6 +45,8 @@ pub async fn dds_task(mut ad985x: Ad985x) {
                         info!("Completed sent for PREPARE command");
 
                         AT_CH.send(Msg::SetOperationStatus(completed)).await;
+
+                        RGB_CH.send(Msg::RgbMode(RgbState::Prepare)).await;
                     }
                     OperationSub::Generate => {
                         info!("Starting DDS operation");
@@ -54,6 +56,8 @@ pub async fn dds_task(mut ad985x: Ad985x) {
                         info!("Setting Device Available to false");
                         AT_CH.send(Msg::SetDdsAvailable(false)).await;
                         info!("Set Device Available to false");
+
+                        RGB_CH.send(Msg::RgbMode(RgbState::Generating)).await;
 
                         let gen_completed =
                             encode_response(b"OPERATION", id, &[b"GENERATE", b"COMPLETED"]);
@@ -112,6 +116,8 @@ pub async fn dds_task(mut ad985x: Ad985x) {
                         info!("Setting Device Available to true");
                         AT_CH.send(Msg::SetDdsAvailable(true)).await;
                         info!("Set Device Available to true");
+
+                        RGB_CH.send(Msg::RgbMode(RgbState::Idle)).await;
 
                         if let Some(err) = result {
                             error!("DDS operation failed");
