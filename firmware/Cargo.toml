@@ -64,7 +64,7 @@ portable-atomic = { version = "1.5", features = ["critical-section"] }
 hexa-tune-proto-embedded = { version = "0.1.1", default-features = false, features = [
   "defmt",
 ] }
-hexa-tune-proto = "0.1.1"
+hexa-tune-proto = "0.1.3"
 
 [profile.release]
 # Enable generation of debug symbols even on release builds
