@@ -747,9 +747,9 @@ dependencies = [
 
 [[package]]
 name = "hexa-tune-proto"
-version = "0.1.1"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "083b47eef4a8c3b07d4235104a19b6991498cf59fe7eac89decbcbf542accde8"
+checksum = "1aeb2f31a4427d26b2fb35d40b978d9c349e28407f0ab94463f48790c13bb0b1"
 dependencies = [
  "defmt",
 ]
